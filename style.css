@@ -1,0 +1,894 @@
+/* ===== CSS Variables ===== */
+:root {
+  --bg-primary: #F7F3EB;
+  --bg-secondary: #FFFFFF;
+  --bg-card: #FFFDF8;
+  --text-primary: #2C1810;
+  --text-secondary: #6B5B4F;
+  --text-tertiary: #9B8B7F;
+  --accent: #8B6914;
+  --accent-hover: #A47D1A;
+  --accent-bg: #FFF8E7;
+  --border: #E8E0D4;
+  --shadow-sm: 0 1px 3px rgba(44,24,16,0.06);
+  --shadow-md: 0 4px 12px rgba(44,24,16,0.08);
+  --shadow-lg: 0 8px 30px rgba(44,24,16,0.12);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --sea: #DDE5EA;
+  --region-stroke: #B8AFA2;
+
+  /* 도(道) */
+  --r-gyeonggi: #E2D5C1;
+  --r-gangwon: #C7D4BE;
+  --r-chungbuk: #D8CCBA;
+  --r-chungnam: #CBDBC7;
+  --r-gyeongbuk: #D8C5AF;
+  --r-jeonbuk: #C4CEBC;
+  --r-jeonnam: #CFCABA;
+  --r-gyeongnam: #C7C4D0;
+  --r-jeju: #BBCFCE;
+
+  /* 광역시·특별시 */
+  --r-seoul: #F2E0B8;
+  --r-incheon: #D0CCC0;
+  --r-sejong: #DDE0C4;
+  --r-daejeon: #BED1B5;
+  --r-daegu: #E5CCA8;
+  --r-gwangju: #B8C8A5;
+  --r-ulsan: #D5C8DE;
+  --r-busan: #AABFD2;
+}
+
+[data-theme="dark"] {
+  --bg-primary: #1A1612;
+  --bg-secondary: #252019;
+  --bg-card: #2D2720;
+  --text-primary: #E8DFD0;
+  --text-secondary: #A89B8F;
+  --text-tertiary: #7B6F63;
+  --accent: #D4A832;
+  --accent-hover: #E0BA45;
+  --accent-bg: #332D1F;
+  --border: #3D362D;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
+  --shadow-lg: 0 8px 30px rgba(0,0,0,0.4);
+  --sea: #141C22;
+  --region-stroke: #5D5449;
+
+  /* 도(道) */
+  --r-gyeonggi: #5C4E3A;
+  --r-gangwon: #3E4D38;
+  --r-chungbuk: #524A3A;
+  --r-chungnam: #3E4D3C;
+  --r-gyeongbuk: #524538;
+  --r-jeonbuk: #3C4538;
+  --r-jeonnam: #4A453A;
+  --r-gyeongnam: #3E3C4A;
+  --r-jeju: #384A48;
+
+  /* 광역시·특별시 */
+  --r-seoul: #6B5A32;
+  --r-incheon: #4A4638;
+  --r-sejong: #4D5038;
+  --r-daejeon: #3A4D34;
+  --r-daegu: #5E4C30;
+  --r-gwangju: #384530;
+  --r-ulsan: #4A4252;
+  --r-busan: #344050;
+}
+
+/* ===== Reset & Base ===== */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100dvh;
+  transition: background-color 0.4s, color 0.4s;
+  overflow-x: hidden;
+}
+
+/* ===== Header ===== */
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: background-color 0.4s;
+}
+
+.logo {
+  font-family: 'Noto Serif KR', Georgia, serif;
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+
+.tagline {
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+  margin-top: 1px;
+  letter-spacing: 0.04em;
+}
+
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.icon-btn:hover {
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+/* ===== Map Section ===== */
+.map-section {
+  padding-top: 68px;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.map-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+#koreaMap {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 2px 8px rgba(44,24,16,0.1));
+}
+
+.map-sea {
+  fill: var(--sea);
+  transition: fill 0.4s;
+}
+
+.map-hint {
+  text-align: center;
+  color: var(--text-tertiary);
+  font-size: 0.85rem;
+  margin-top: 8px;
+  transition: opacity 0.3s;
+}
+
+.map-hint.hidden {
+  opacity: 0;
+}
+
+/* Region paths — 도(道) */
+.region path {
+  stroke: var(--region-stroke);
+  stroke-width: 1.5;
+  cursor: pointer;
+  transition: fill 0.25s, filter 0.25s, transform 0.25s;
+  transform-origin: center;
+}
+
+.region[data-region="gyeonggi"] path { fill: var(--r-gyeonggi); }
+.region[data-region="gangwon"] path { fill: var(--r-gangwon); }
+.region[data-region="chungbuk"] path { fill: var(--r-chungbuk); }
+.region[data-region="chungnam"] path { fill: var(--r-chungnam); }
+.region[data-region="gyeongbuk"] path { fill: var(--r-gyeongbuk); }
+.region[data-region="jeonbuk"] path { fill: var(--r-jeonbuk); }
+.region[data-region="jeonnam"] path { fill: var(--r-jeonnam); }
+.region[data-region="gyeongnam"] path { fill: var(--r-gyeongnam); }
+.region[data-region="jeju"] path { fill: var(--r-jeju); }
+
+/* Region paths — 광역시·특별시 */
+.region[data-region="seoul"] path { fill: var(--r-seoul); }
+.region[data-region="incheon"] path { fill: var(--r-incheon); }
+.region[data-region="sejong"] path { fill: var(--r-sejong); }
+.region[data-region="daejeon"] path { fill: var(--r-daejeon); }
+.region[data-region="daegu"] path { fill: var(--r-daegu); }
+.region[data-region="gwangju"] path { fill: var(--r-gwangju); }
+.region[data-region="ulsan"] path { fill: var(--r-ulsan); }
+.region[data-region="busan"] path { fill: var(--r-busan); }
+
+/* 광역시 구분선 강조 */
+.region.metro path {
+  stroke-width: 2;
+}
+
+.region:hover path {
+  filter: brightness(1.08);
+  stroke-width: 2;
+}
+
+.region.metro:hover path {
+  stroke-width: 2.5;
+}
+
+.region.selected path {
+  fill: var(--accent) !important;
+  stroke: var(--text-primary);
+  stroke-width: 2.5;
+  filter: brightness(1.05) drop-shadow(0 2px 6px rgba(139,105,20,0.3));
+}
+
+/* Labels */
+.labels-group text {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 14px;
+  font-weight: 700;
+  fill: var(--text-secondary);
+  text-anchor: middle;
+  pointer-events: none;
+  transition: fill 0.3s;
+}
+
+.labels-group text.metro-label {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* Badges */
+.count-badge {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.count-badge.visible {
+  opacity: 1;
+}
+
+.count-badge circle {
+  fill: var(--accent);
+  stroke: var(--bg-primary);
+  stroke-width: 2;
+}
+
+.count-badge text {
+  fill: #FFF;
+  font-size: 11px;
+  font-weight: 700;
+  text-anchor: middle;
+  font-family: -apple-system, system-ui, sans-serif;
+}
+
+/* ===== Story Panel ===== */
+.story-panel {
+  position: fixed;
+  z-index: 200;
+  background: var(--bg-secondary);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+/* Mobile: bottom sheet */
+@media (max-width: 768px) {
+  .story-panel {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 75dvh;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    transform: translateY(100%);
+    box-shadow: 0 -4px 30px rgba(0,0,0,0.15);
+  }
+
+  .story-panel.open {
+    transform: translateY(0);
+  }
+}
+
+/* Desktop: side panel */
+@media (min-width: 769px) {
+  .story-panel {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 440px;
+    transform: translateX(100%);
+    border-left: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .story-panel.open {
+    transform: translateX(0);
+  }
+}
+
+.panel-drag-handle {
+  width: 36px;
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  margin: 10px auto 4px;
+  flex-shrink: 0;
+}
+
+@media (min-width: 769px) {
+  .panel-drag-handle { display: none; }
+}
+
+.panel-header {
+  padding: 12px 20px 0;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.panel-close-btn {
+  position: absolute;
+  top: 8px;
+  right: 16px;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.region-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: var(--accent);
+  padding-right: 40px;
+}
+
+.region-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 4px;
+  margin-top: 14px;
+  padding-bottom: 2px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 9px 0;
+  border: none;
+  background: transparent;
+  color: var(--text-tertiary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 2.5px solid transparent;
+  transition: all 0.2s;
+}
+
+.tab-btn:hover {
+  color: var(--text-secondary);
+}
+
+.tab-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* Panel body */
+.panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Panel footer */
+.panel-footer {
+  padding: 12px 20px;
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.write-btn {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: #FFF;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.write-btn:hover {
+  background: var(--accent-hover);
+}
+
+/* ===== Story Cards ===== */
+.story-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+  animation: fadeSlideUp 0.35s ease both;
+}
+
+.story-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent);
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 100px;
+  letter-spacing: 0.02em;
+}
+
+.badge-literature {
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.badge-user {
+  background: #EDF2EE;
+  color: #3D6B4F;
+}
+
+[data-theme="dark"] .badge-user {
+  background: #1E2E22;
+  color: #7DB88D;
+}
+
+.card-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-top: 8px;
+  line-height: 1.4;
+}
+
+.card-author {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.card-location {
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
+  margin-top: 3px;
+}
+
+.card-date {
+  font-size: 0.78rem;
+  color: var(--text-tertiary);
+  margin-top: 3px;
+}
+
+.card-excerpt {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 10px;
+  line-height: 1.65;
+  white-space: pre-line;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 50px 20px;
+  color: var(--text-tertiary);
+}
+
+.empty-state p:first-child {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+}
+
+.empty-sub {
+  font-size: 0.85rem;
+  margin-top: 8px;
+}
+
+/* ===== Modals ===== */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+}
+
+.modal.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+}
+
+.modal-content {
+  position: relative;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 480px;
+  max-height: 85dvh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(20px) scale(0.97);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal.open .modal-content {
+  transform: translateY(0) scale(1);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 20px 0;
+}
+
+.modal-header h3 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.modal-close-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: var(--bg-primary);
+  border-radius: 50%;
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.modal-close-btn:hover {
+  background: var(--border);
+  color: var(--text-primary);
+}
+
+/* Write form */
+.write-modal {
+  padding-bottom: 20px;
+}
+
+.form-group {
+  padding: 0 20px;
+  margin-top: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 0.92rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--accent);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.6;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  padding: 20px 20px 0;
+}
+
+.btn {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #FFF;
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn-secondary {
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  border: 1.5px solid var(--border);
+}
+
+.btn-secondary:hover {
+  background: var(--border);
+}
+
+/* Detail modal */
+.detail-modal {
+  padding: 24px;
+}
+
+.detail-modal .modal-close-top {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+
+.detail-modal h3 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-top: 10px;
+  line-height: 1.4;
+}
+
+.detail-author {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-top: 6px;
+}
+
+.detail-location {
+  font-size: 0.85rem;
+  color: var(--text-tertiary);
+  margin-top: 4px;
+}
+
+.detail-date {
+  font-size: 0.85rem;
+  color: var(--text-tertiary);
+  margin-top: 4px;
+}
+
+.detail-excerpt {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 1rem;
+  line-height: 1.85;
+  color: var(--text-primary);
+  margin-top: 20px;
+  padding: 20px;
+  background: var(--accent-bg);
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--accent);
+  white-space: pre-line;
+}
+
+.detail-desc {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin-top: 16px;
+}
+
+.detail-content {
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: var(--text-primary);
+  margin-top: 16px;
+}
+
+.delete-btn {
+  display: block;
+  width: 100%;
+  margin-top: 24px;
+  padding: 11px;
+  border: 1.5px solid #D44;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: #D44;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.delete-btn:hover {
+  background: #D44;
+  color: #FFF;
+}
+
+/* ===== Overlay ===== */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.3);
+  z-index: 150;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ===== Animations ===== */
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Region entrance animation — 도(道) */
+.region path {
+  animation: regionFadeIn 0.6s ease both;
+}
+
+.region[data-region="gyeonggi"] path { animation-delay: 0.03s; }
+.region[data-region="gangwon"] path { animation-delay: 0.06s; }
+.region[data-region="chungbuk"] path { animation-delay: 0.09s; }
+.region[data-region="chungnam"] path { animation-delay: 0.12s; }
+.region[data-region="gyeongbuk"] path { animation-delay: 0.15s; }
+.region[data-region="jeonbuk"] path { animation-delay: 0.18s; }
+.region[data-region="jeonnam"] path { animation-delay: 0.21s; }
+.region[data-region="gyeongnam"] path { animation-delay: 0.24s; }
+.region[data-region="jeju"] path { animation-delay: 0.30s; }
+
+/* Region entrance animation — 광역시·특별시 */
+.region[data-region="seoul"] path { animation-delay: 0.33s; }
+.region[data-region="incheon"] path { animation-delay: 0.35s; }
+.region[data-region="sejong"] path { animation-delay: 0.37s; }
+.region[data-region="daejeon"] path { animation-delay: 0.39s; }
+.region[data-region="daegu"] path { animation-delay: 0.41s; }
+.region[data-region="gwangju"] path { animation-delay: 0.43s; }
+.region[data-region="ulsan"] path { animation-delay: 0.45s; }
+.region[data-region="busan"] path { animation-delay: 0.47s; }
+
+@keyframes regionFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ===== Scrollbar ===== */
+.panel-body::-webkit-scrollbar {
+  width: 5px;
+}
+
+.panel-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.panel-body::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+/* ===== Desktop layout ===== */
+@media (min-width: 769px) {
+  .map-section {
+    transition: padding-right 0.35s;
+  }
+
+  body.panel-open .map-section {
+    padding-right: 440px;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-header {
+    padding: 10px 16px;
+  }
+
+  .logo {
+    font-size: 1.15rem;
+  }
+
+  .map-wrapper {
+    padding: 8px;
+  }
+
+  .region-title {
+    font-size: 1.2rem;
+  }
+
+  .detail-modal {
+    padding: 20px;
+  }
+}
+
+/* ===== Accessibility ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

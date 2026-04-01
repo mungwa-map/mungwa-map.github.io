@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#8B6914">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>문학 지도 - 이야기가 머무는 곳</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- ===== 헤더 ===== -->
+    <header class="app-header">
+      <div class="header-left">
+        <h1 class="logo">문학 지도</h1>
+        <p class="tagline">이야기가 머무는 곳</p>
+      </div>
+      <button id="themeToggle" class="icon-btn" aria-label="테마 전환"></button>
+    </header>
+
+    <!-- ===== 지도 섹션 ===== -->
+    <main class="map-section">
+      <div class="map-wrapper">
+        <svg id="koreaMap" viewBox="0 0 550 750" xmlns="http://www.w3.org/2000/svg">
+          <!-- 바다 배경 -->
+          <rect class="map-sea" x="0" y="0" width="550" height="750" rx="12"/>
+
+          <!-- 지역 그룹 -->
+          <g class="regions-group">
+            <!-- === 도(道) 레이어 (배경) === -->
+
+            <!-- 경기도 -->
+            <g class="region" data-region="gyeonggi">
+              <path d="M110,95 L165,72 L230,62 L275,65 L285,100 L275,145 L250,160 L215,175 L175,178 L135,168 L100,135Z"/>
+            </g>
+            <!-- 강원도 -->
+            <g class="region" data-region="gangwon">
+              <path d="M275,65 L340,52 L400,60 L445,95 L465,160 L460,225 L430,260 L380,250 L335,235 L300,205 L275,145 L285,100Z"/>
+            </g>
+            <!-- 충청북도 -->
+            <g class="region" data-region="chungbuk">
+              <path d="M215,175 L250,160 L275,145 L300,205 L335,235 L330,285 L305,310 L250,305 L215,275 L195,230Z"/>
+            </g>
+            <!-- 충청남도 -->
+            <g class="region" data-region="chungnam">
+              <path d="M68,185 L100,135 L135,168 L175,178 L215,175 L195,230 L215,275 L195,315 L155,335 L105,315 L70,280 L55,235Z"/>
+            </g>
+            <!-- 경상북도 -->
+            <g class="region" data-region="gyeongbuk">
+              <path d="M335,235 L380,250 L430,260 L460,225 L480,295 L485,370 L460,415 L410,410 L370,385 L340,350 L305,310 L330,285Z"/>
+            </g>
+            <!-- 전라북도 -->
+            <g class="region" data-region="jeonbuk">
+              <path d="M105,315 L155,335 L195,315 L215,275 L250,305 L305,310 L280,365 L240,395 L190,410 L140,400 L95,370Z"/>
+            </g>
+            <!-- 전라남도 -->
+            <g class="region" data-region="jeonnam">
+              <path d="M95,370 L140,400 L190,410 L240,395 L235,520 L185,540 L135,555 L85,530 L55,475 L60,415Z"/>
+            </g>
+            <!-- 경상남도 -->
+            <g class="region" data-region="gyeongnam">
+              <path d="M305,310 L340,350 L370,385 L410,410 L460,415 L450,475 L415,520 L365,545 L305,555 L235,520 L240,395 L280,365Z"/>
+            </g>
+            <!-- 제주도 -->
+            <g class="region" data-region="jeju">
+              <path d="M115,630 L195,620 L235,645 L225,680 L160,695 L105,675Z"/>
+            </g>
+
+            <!-- === 광역시·특별시 레이어 (전경) === -->
+
+            <!-- 서울특별시 -->
+            <g class="region metro" data-region="seoul">
+              <path d="M158,78 L230,62 L255,72 L235,110 L168,110Z"/>
+            </g>
+            <!-- 인천광역시 -->
+            <g class="region metro" data-region="incheon">
+              <path d="M110,95 L150,80 L168,110 L168,145 L135,168 L100,135Z"/>
+            </g>
+            <!-- 세종특별자치시 -->
+            <g class="region metro" data-region="sejong">
+              <path d="M175,205 L208,198 L218,222 L208,245 L178,242 L168,220Z"/>
+            </g>
+            <!-- 대전광역시 -->
+            <g class="region metro" data-region="daejeon">
+              <path d="M172,255 L208,248 L220,270 L212,293 L178,295 L165,275Z"/>
+            </g>
+            <!-- 대구광역시 -->
+            <g class="region metro" data-region="daegu">
+              <path d="M360,360 L400,353 L418,375 L412,398 L382,405 L360,390Z"/>
+            </g>
+            <!-- 광주광역시 -->
+            <g class="region metro" data-region="gwangju">
+              <path d="M125,415 L165,408 L178,428 L170,452 L138,455 L122,435Z"/>
+            </g>
+            <!-- 울산광역시 -->
+            <g class="region metro" data-region="ulsan">
+              <path d="M435,385 L468,375 L482,398 L478,422 L452,428 L435,410Z"/>
+            </g>
+            <!-- 부산광역시 -->
+            <g class="region metro" data-region="busan">
+              <path d="M395,478 L430,470 L448,490 L442,518 L412,525 L392,508Z"/>
+            </g>
+          </g>
+
+          <!-- 지역 이름 라벨 -->
+          <g class="labels-group">
+            <!-- 도 라벨 -->
+            <text x="240" y="155" data-label="gyeonggi">경기</text>
+            <text x="375" y="148" data-label="gangwon">강원</text>
+            <text x="280" y="250" data-label="chungbuk">충북</text>
+            <text x="108" y="260" data-label="chungnam">충남</text>
+            <text x="400" y="305" data-label="gyeongbuk">경북</text>
+            <text x="200" y="358" data-label="jeonbuk">전북</text>
+            <text x="135" y="500" data-label="jeonnam">전남</text>
+            <text x="320" y="470" data-label="gyeongnam">경남</text>
+            <text x="168" y="660" data-label="jeju">제주</text>
+            <!-- 광역시 라벨 -->
+            <text x="204" y="98" data-label="seoul" class="metro-label">서울</text>
+            <text x="138" y="125" data-label="incheon" class="metro-label">인천</text>
+            <text x="193" y="225" data-label="sejong" class="metro-label">세종</text>
+            <text x="193" y="277" data-label="daejeon" class="metro-label">대전</text>
+            <text x="389" y="382" data-label="daegu" class="metro-label">대구</text>
+            <text x="150" y="438" data-label="gwangju" class="metro-label">광주</text>
+            <text x="458" y="406" data-label="ulsan" class="metro-label">울산</text>
+            <text x="422" y="500" data-label="busan" class="metro-label">부산</text>
+          </g>
+
+          <!-- 작품 수 뱃지 -->
+          <g class="badges-group">
+            <!-- 도 뱃지 -->
+            <g class="count-badge" data-badge="gyeonggi" transform="translate(260,162)">
+              <circle r="12"/><text dy="4.5"></text>
+            </g>
+            <g class="count-badge" data-badge="gangwon" transform="translate(400,162)">
+              <circle r="12"/><text dy="4.5"></text>
+            </g>
+            <g class="count-badge" data-badge="chungbuk" transform="translate(300,258)">
+              <circle r="12"/><text dy="4.5"></text>
+            </g>
+            <g class="count-badge" data-badge="chungnam" transform="translate(128,272)">
+              <circle r="12"/><text dy="4.5"></text>
+            </g>
+            <g class="count-badge" data-badge="gyeongbuk" transform="translate(422,316)">
+              <circle r="12"/><text dy="4.5"></text>
+            </g>
+            <g class="count-badge" data-badge="jeonbuk" transform="translate(228,372)">
+              <circle r="12"/><text dy="4.5"></text>
+            </g>
+            <g class="count-badge" data-badge="jeonnam" transform="translate(158,512)">
+              <circle r="12"/><text dy="4.5"></text>
+            </g>
+            <g class="count-badge" data-badge="gyeongnam" transform="translate(342,482)">
+              <circle r="12"/><text dy="4.5"></text>
+            </g>
+            <g class="count-badge" data-badge="jeju" transform="translate(195,672)">
+              <circle r="12"/><text dy="4.5"></text>
+            </g>
+            <!-- 광역시 뱃지 -->
+            <g class="count-badge" data-badge="seoul" transform="translate(228,105)">
+              <circle r="10"/><text dy="4"></text>
+            </g>
+            <g class="count-badge" data-badge="incheon" transform="translate(158,132)">
+              <circle r="10"/><text dy="4"></text>
+            </g>
+            <g class="count-badge" data-badge="sejong" transform="translate(215,230)">
+              <circle r="10"/><text dy="4"></text>
+            </g>
+            <g class="count-badge" data-badge="daejeon" transform="translate(215,282)">
+              <circle r="10"/><text dy="4"></text>
+            </g>
+            <g class="count-badge" data-badge="daegu" transform="translate(412,390)">
+              <circle r="10"/><text dy="4"></text>
+            </g>
+            <g class="count-badge" data-badge="gwangju" transform="translate(172,445)">
+              <circle r="10"/><text dy="4"></text>
+            </g>
+            <g class="count-badge" data-badge="ulsan" transform="translate(478,412)">
+              <circle r="10"/><text dy="4"></text>
+            </g>
+            <g class="count-badge" data-badge="busan" transform="translate(442,508)">
+              <circle r="10"/><text dy="4"></text>
+            </g>
+          </g>
+        </svg>
+
+        <!-- 지도 안내 -->
+        <p class="map-hint" id="mapHint">지역을 선택해보세요</p>
+      </div>
+    </main>
+
+    <!-- ===== 스토리 패널 ===== -->
+    <aside id="storyPanel" class="story-panel">
+      <div class="panel-drag-handle"></div>
+      <div class="panel-header">
+        <button id="panelClose" class="icon-btn panel-close-btn" aria-label="닫기">&times;</button>
+        <h2 id="regionTitle" class="region-title"></h2>
+        <p id="regionDesc" class="region-desc"></p>
+        <div class="tabs">
+          <button class="tab-btn active" data-filter="all">전체</button>
+          <button class="tab-btn" data-filter="literature">문학작품</button>
+          <button class="tab-btn" data-filter="user">사용자 글</button>
+        </div>
+      </div>
+      <div class="panel-body" id="storyList"></div>
+      <div class="panel-footer">
+        <button id="writeBtn" class="write-btn">이야기 남기기</button>
+      </div>
+    </aside>
+
+    <!-- ===== 글쓰기 모달 ===== -->
+    <div id="writeModal" class="modal">
+      <div class="modal-content write-modal">
+        <div class="modal-header">
+          <h3><span id="writeRegion"></span>에 이야기 남기기</h3>
+          <button class="modal-close-btn" data-close="writeModal">&times;</button>
+        </div>
+        <form id="writeForm">
+          <div class="form-group">
+            <label for="authorInput">필명</label>
+            <input type="text" id="authorInput" name="author" placeholder="이름 또는 필명" required>
+          </div>
+          <div class="form-group">
+            <label for="titleInput">제목</label>
+            <input type="text" id="titleInput" name="storyTitle" placeholder="이야기의 제목" required>
+          </div>
+          <div class="form-group">
+            <label for="categorySelect">카테고리</label>
+            <select id="categorySelect" name="category">
+              <option value="essay">수필/에세이</option>
+              <option value="poem">시</option>
+              <option value="review">감상/리뷰</option>
+              <option value="memory">추억/일상</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="contentInput">내용</label>
+            <textarea id="contentInput" name="content" rows="6" placeholder="이 장소와 관련된 이야기를 들려주세요..." required></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="button" id="cancelBtn" class="btn btn-secondary">취소</button>
+            <button type="submit" class="btn btn-primary">등록하기</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ===== 상세보기 모달 ===== -->
+    <div id="detailModal" class="modal">
+      <div class="modal-content detail-modal" id="detailContent"></div>
+    </div>
+
+    <!-- ===== 오버레이 ===== -->
+    <div id="overlay" class="overlay"></div>
+
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
