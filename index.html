@@ -257,13 +257,18 @@
         <button id="panelClose" class="icon-btn panel-close-btn" aria-label="닫기">&times;</button>
         <h2 id="regionTitle" class="region-title"></h2>
         <p id="regionDesc" class="region-desc"></p>
-        <div class="tabs">
-          <button class="tab-btn active" data-filter="all">전체</button>
-          <button class="tab-btn" data-filter="literature">문학작품</button>
-          <button class="tab-btn" data-filter="user">사용자 글</button>
+      </div>
+      <div class="panel-body" id="panelBody">
+        <div class="panel-section">
+          <h3 class="section-header" id="litSectionTitle">문학작품</h3>
+          <div id="literaryList"></div>
+        </div>
+        <div class="panel-divider"></div>
+        <div class="panel-section">
+          <h3 class="section-header" id="userSectionTitle">이 곳의 이야기</h3>
+          <div id="userList"></div>
         </div>
       </div>
-      <div class="panel-body" id="storyList"></div>
       <div class="panel-footer">
         <button id="writeBtn" class="write-btn">이야기 남기기</button>
       </div>
@@ -284,6 +289,12 @@
           <div class="form-group">
             <label for="titleInput">제목</label>
             <input type="text" id="titleInput" name="storyTitle" placeholder="이야기의 제목" required>
+          </div>
+          <div class="form-group">
+            <label for="relatedWorkSelect">관련 작품 <span class="label-optional">(선택)</span></label>
+            <select id="relatedWorkSelect" name="relatedWork">
+              <option value="">작품 선택 안 함 — 자유 글</option>
+            </select>
           </div>
           <div class="form-group">
             <label for="categorySelect">카테고리</label>

@@ -4,8 +4,9 @@
   // ===== State =====
   const state = {
     selectedRegion: null,
-    currentFilter: 'all',
     userStories: [],
+    likes: {},       // { storyId: true } — 내가 공감한 글
+    userSort: 'latest', // 'latest' | 'likes'
     theme: 'light'
   };
 
@@ -31,6 +32,9 @@
     try {
       state.userStories = JSON.parse(localStorage.getItem('literary-map-stories') || '[]');
     } catch { state.userStories = []; }
+    try {
+      state.likes = JSON.parse(localStorage.getItem('literary-map-likes') || '{}');
+    } catch { state.likes = {}; }
     state.theme = localStorage.getItem('literary-map-theme') ||
       (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
   }
@@ -95,28 +99,14 @@
   function setupPanel() {
     $('#panelClose').addEventListener('click', closePanel);
     $('#overlay').addEventListener('click', closePanel);
-
-    $$('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        $$('.tab-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        state.currentFilter = btn.dataset.filter;
-        renderStories();
-      });
-    });
   }
 
   function showPanel(regionId) {
-    const panel = $('#storyPanel');
-    const region = REGIONS[regionId];
+    var panel = $('#storyPanel');
+    var region = REGIONS[regionId];
 
     $('#regionTitle').textContent = region.name;
     $('#regionDesc').textContent = region.description;
-
-    // Reset filter
-    state.currentFilter = 'all';
-    $$('.tab-btn').forEach(b => b.classList.remove('active'));
-    $('.tab-btn[data-filter="all"]').classList.add('active');
 
     renderStories();
     panel.classList.add('open');
@@ -137,38 +127,69 @@
 
   // ===== Stories =====
   function renderStories() {
-    const container = $('#storyList');
-    container.innerHTML = '';
-
-    const regionId = state.selectedRegion;
+    var regionId = state.selectedRegion;
     if (!regionId) return;
 
-    let stories = [];
+    var litContainer = $('#literaryList');
+    var userContainer = $('#userList');
+    litContainer.innerHTML = '';
+    userContainer.innerHTML = '';
 
-    if (state.currentFilter !== 'user') {
-      const literary = LITERARY_DATA.filter(w => w.region === regionId);
-      stories = stories.concat(literary.map(w => ({ ...w, storyType: 'literature' })));
+    // 문학작품 영역
+    var literary = LITERARY_DATA.filter(function(w) { return w.region === regionId; });
+    $('#litSectionTitle').textContent = '\uBB38\uD559\uC791\uD488 ' + literary.length + '\uD3B8';
+
+    if (literary.length === 0) {
+      litContainer.innerHTML = '<p class="section-empty">\uB4F1\uB85D\uB41C \uBB38\uD559\uC791\uD488\uC774 \uC5C6\uC2B5\uB2C8\uB2E4</p>';
+    } else {
+      literary.forEach(function(w, i) {
+        var card = createStoryCard({ ...w, storyType: 'literature' });
+        card.style.animationDelay = (i * 0.05) + 's';
+        litContainer.appendChild(card);
+      });
     }
 
-    if (state.currentFilter !== 'literature') {
-      const user = state.userStories.filter(s => s.region === regionId);
-      stories = stories.concat(user.map(s => ({ ...s, storyType: 'user' })));
+    // 사용자 이야기 영역
+    var user = state.userStories.filter(function(s) { return s.region === regionId; });
+
+    // 정렬
+    if (state.userSort === 'likes') {
+      user.sort(function(a, b) { return (b.likeCount || 0) - (a.likeCount || 0); });
+    } else {
+      user.sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
     }
 
-    if (stories.length === 0) {
-      container.innerHTML =
+    var sortHtml = user.length > 1
+      ? '<div class="sort-toggle">' +
+        '<button class="sort-btn' + (state.userSort === 'latest' ? ' active' : '') + '" data-sort="latest">\uCD5C\uC2E0\uC21C</button>' +
+        '<button class="sort-btn' + (state.userSort === 'likes' ? ' active' : '') + '" data-sort="likes">\uACF5\uAC10\uC21C</button>' +
+        '</div>'
+      : '';
+
+    $('#userSectionTitle').innerHTML = '\uC774 \uACF3\uC758 \uC774\uC57C\uAE30 ' + user.length + '\uAC1C' + sortHtml;
+
+    // 정렬 버튼 이벤트
+    $$('#userSectionTitle .sort-btn').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        state.userSort = btn.dataset.sort;
+        renderStories();
+      });
+    });
+
+    if (user.length === 0) {
+      userContainer.innerHTML =
         '<div class="empty-state">' +
-        '<p>\uD83D\uDCDA \uC544\uC9C1 \uC774\uC57C\uAE30\uAC00 \uC5C6\uC2B5\uB2C8\uB2E4</p>' +
+        '<p>\uC544\uC9C1 \uC774\uC57C\uAE30\uAC00 \uC5C6\uC2B5\uB2C8\uB2E4</p>' +
         '<p class="empty-sub">\uCCAB \uBC88\uC9F8 \uC774\uC57C\uAE30\uB97C \uB0A8\uACA8\uBCF4\uC138\uC694</p>' +
         '</div>';
-      return;
+    } else {
+      user.forEach(function(s, i) {
+        var card = createStoryCard({ ...s, storyType: 'user' });
+        card.style.animationDelay = (i * 0.05) + 's';
+        userContainer.appendChild(card);
+      });
     }
-
-    stories.forEach(function(story, i) {
-      var card = createStoryCard(story);
-      card.style.animationDelay = (i * 0.05) + 's';
-      container.appendChild(card);
-    });
   }
 
   function createStoryCard(story) {
@@ -179,19 +200,46 @@
       card.innerHTML =
         '<span class="badge badge-literature">' + escHtml(story.genre) + '</span>' +
         '<h4 class="card-title">' + escHtml(story.title) + '</h4>' +
-        '<p class="card-author">' + escHtml(story.author) + ' \u00B7 ' + story.year + '</p>' +
-        '<p class="card-location">\uD83D\uDCCD ' + escHtml(story.location) + '</p>' +
+        '<p class="card-meta">' + escHtml(story.author) + ' \u00B7 ' + story.year + '</p>' +
+        '<p class="card-location">' + escHtml(story.location) + '</p>' +
         '<p class="card-excerpt">' + escHtml(story.excerpt) + '</p>';
     } else {
+      var relatedHtml = '';
+      if (story.relatedWork) {
+        var work = LITERARY_DATA.find(function(w) { return w.id === story.relatedWork; });
+        if (work) {
+          relatedHtml = '<p class="card-related">\u300E' + escHtml(work.title) + '\u300F \uC5D0 \uB300\uD55C \uC774\uC57C\uAE30</p>';
+        }
+      }
+      var likeCount = story.likeCount || 0;
+      var liked = state.likes[story.id] ? ' liked' : '';
       card.innerHTML =
         '<span class="badge badge-user">' + getCategoryLabel(story.category) + '</span>' +
         '<h4 class="card-title">' + escHtml(story.title) + '</h4>' +
-        '<p class="card-author">' + escHtml(story.author) + '</p>' +
-        '<p class="card-date">' + formatDate(story.date) + '</p>' +
-        '<p class="card-excerpt">' + escHtml(truncate(story.content, 80)) + '</p>';
+        '<p class="card-meta">' + escHtml(story.author) + ' \u00B7 ' + formatDate(story.date) + '</p>' +
+        relatedHtml +
+        '<p class="card-excerpt">' + escHtml(story.content) + '</p>' +
+        '<div class="card-footer">' +
+        '<button class="like-btn' + liked + '" data-like-id="' + story.id + '">\u2665 ' + (likeCount > 0 ? likeCount : '') + '</button>' +
+        '</div>';
     }
 
-    card.addEventListener('click', function() { showDetail(story); });
+    card.addEventListener('click', function(e) {
+      // 공감 버튼은 별도 처리
+      if (e.target.closest('.like-btn')) return;
+      showDetail(story);
+    });
+
+    // 공감 버튼
+    var likeBtn = card.querySelector('.like-btn');
+    if (likeBtn) {
+      likeBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        toggleLike(story.id);
+        renderStories();
+      });
+    }
+
     return card;
   }
 
@@ -201,21 +249,45 @@
     var content = $('#detailContent');
 
     if (story.storyType === 'literature') {
+      // 관련 사용자 글 목록
+      var relatedStories = state.userStories.filter(function(s) { return s.relatedWork === story.id; });
+      var relatedHtml = '';
+      if (relatedStories.length > 0) {
+        relatedHtml = '<div class="detail-related"><h4 class="detail-related-title">\uB3C5\uC790\uB4E4\uC758 \uC774\uC57C\uAE30 ' + relatedStories.length + '\uAC1C</h4>';
+        relatedStories.forEach(function(s) {
+          relatedHtml += '<div class="detail-related-item" data-related-id="' + s.id + '">' +
+            '<p class="related-title">' + escHtml(s.title) + '</p>' +
+            '<p class="related-meta">' + escHtml(s.author) + ' \u00B7 ' + formatDate(s.date) + '</p>' +
+            '</div>';
+        });
+        relatedHtml += '</div>';
+      }
+
       content.innerHTML =
         '<button class="modal-close-btn modal-close-top" data-close="detailModal">&times;</button>' +
         '<span class="badge badge-literature">' + escHtml(story.genre) + '</span>' +
         '<h3>' + escHtml(story.title) + '</h3>' +
-        '<p class="detail-author">' + escHtml(story.author) + ' \u00B7 ' + story.year + '</p>' +
-        '<p class="detail-location">\uD83D\uDCCD ' + escHtml(story.location) + '</p>' +
+        '<p class="detail-meta">' + escHtml(story.author) + ' \u00B7 ' + story.year + ' \u00B7 ' + escHtml(story.location) + '</p>' +
         '<div class="detail-excerpt">' + escHtml(story.excerpt) + '</div>' +
-        '<p class="detail-desc">' + escHtml(story.description) + '</p>';
+        '<p class="detail-desc">' + escHtml(story.description) + '</p>' +
+        relatedHtml +
+        '<button class="write-comment-btn" data-work-id="' + story.id + '">\uB098\uB3C4 \uD55C\uB9C8\uB514</button>';
     } else {
+      // 연결된 작품 링크
+      var workLinkHtml = '';
+      if (story.relatedWork) {
+        var work = LITERARY_DATA.find(function(w) { return w.id === story.relatedWork; });
+        if (work) {
+          workLinkHtml = '<p class="detail-work-link" data-work-id="' + work.id + '">\u300E' + escHtml(work.title) + '\u300F ' + escHtml(work.author) + ' \u203A</p>';
+        }
+      }
+
       content.innerHTML =
         '<button class="modal-close-btn modal-close-top" data-close="detailModal">&times;</button>' +
         '<span class="badge badge-user">' + getCategoryLabel(story.category) + '</span>' +
         '<h3>' + escHtml(story.title) + '</h3>' +
-        '<p class="detail-author">' + escHtml(story.author) + '</p>' +
-        '<p class="detail-date">' + formatDate(story.date) + '</p>' +
+        '<p class="detail-meta">' + escHtml(story.author) + ' \u00B7 ' + formatDate(story.date) + '</p>' +
+        workLinkHtml +
         '<div class="detail-content">' + escHtml(story.content).replace(/\n/g, '<br>') + '</div>' +
         '<button class="delete-btn" data-delete-id="' + story.id + '">\uC0AD\uC81C\uD558\uAE30</button>';
     }
@@ -223,6 +295,32 @@
     // Bind close button
     content.querySelector('[data-close]').addEventListener('click', function() {
       closeModal('detailModal');
+    });
+
+    // Bind "나도 한마디" button
+    var commentBtn = content.querySelector('[data-work-id].write-comment-btn');
+    if (commentBtn) {
+      commentBtn.addEventListener('click', function() {
+        closeModal('detailModal');
+        openWriteModal(this.dataset.workId);
+      });
+    }
+
+    // Bind work link (사용자 글 → 작품 상세로 이동)
+    var workLink = content.querySelector('.detail-work-link[data-work-id]');
+    if (workLink) {
+      workLink.addEventListener('click', function() {
+        var work = LITERARY_DATA.find(function(w) { return w.id === workLink.dataset.workId; });
+        if (work) showDetail({ ...work, storyType: 'literature' });
+      });
+    }
+
+    // Bind related story items
+    content.querySelectorAll('[data-related-id]').forEach(function(item) {
+      item.addEventListener('click', function() {
+        var s = state.userStories.find(function(u) { return u.id === item.dataset.relatedId; });
+        if (s) showDetail({ ...s, storyType: 'user' });
+      });
     });
 
     // Bind delete button
@@ -246,8 +344,7 @@
   function setupWriteForm() {
     $('#writeBtn').addEventListener('click', function() {
       if (!state.selectedRegion) return;
-      $('#writeRegion').textContent = REGIONS[state.selectedRegion].shortName;
-      openModal('writeModal');
+      openWriteModal();
     });
 
     $('#cancelBtn').addEventListener('click', function() {
@@ -265,6 +362,7 @@
         title: form.storyTitle.value.trim(),
         content: form.content.value.trim(),
         category: form.category.value,
+        relatedWork: form.relatedWork.value || null,
         date: new Date().toISOString(),
         storyType: 'user'
       };
@@ -278,10 +376,32 @@
 
       // Scroll to bottom to show new card
       setTimeout(function() {
-        var list = $('#storyList');
-        list.scrollTop = list.scrollHeight;
+        var panel = $('#panelBody');
+        panel.scrollTop = panel.scrollHeight;
       }, 100);
     });
+  }
+
+  function openWriteModal(preselectedWorkId) {
+    if (!state.selectedRegion) return;
+    $('#writeRegion').textContent = REGIONS[state.selectedRegion].shortName;
+
+    // 관련 작품 드롭다운 채우기
+    var select = $('#relatedWorkSelect');
+    select.innerHTML = '<option value="">\uC791\uD488 \uC120\uD0DD \uC548 \uD568 \u2014 \uC790\uC720 \uAE00</option>';
+    var works = LITERARY_DATA.filter(function(w) { return w.region === state.selectedRegion; });
+    works.forEach(function(w) {
+      var opt = document.createElement('option');
+      opt.value = w.id;
+      opt.textContent = '\u300E' + w.title + '\u300F ' + w.author;
+      select.appendChild(opt);
+    });
+
+    if (preselectedWorkId) {
+      select.value = preselectedWorkId;
+    }
+
+    openModal('writeModal');
   }
 
   // ===== Modal Helpers =====
@@ -349,6 +469,23 @@
   // ===== Story CRUD =====
   function deleteStory(id) {
     state.userStories = state.userStories.filter(function(s) { return s.id !== id; });
+    saveStories();
+  }
+
+  function toggleLike(storyId) {
+    // 공감 토글
+    var story = state.userStories.find(function(s) { return s.id === storyId; });
+    if (!story) return;
+
+    if (state.likes[storyId]) {
+      delete state.likes[storyId];
+      story.likeCount = Math.max(0, (story.likeCount || 1) - 1);
+    } else {
+      state.likes[storyId] = true;
+      story.likeCount = (story.likeCount || 0) + 1;
+    }
+
+    localStorage.setItem('literary-map-likes', JSON.stringify(state.likes));
     saveStories();
   }
 
