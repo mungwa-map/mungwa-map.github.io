@@ -1,0 +1,18 @@
+{
+  "name": "문학 지도 - 이야기가 머무는 곳",
+  "short_name": "문학지도",
+  "description": "한국 문학 작품의 배경이 된 장소들을 탐험하고, 나만의 이야기를 남겨보세요.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#F7F3EB",
+  "theme_color": "#8B6914",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
