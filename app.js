@@ -68,11 +68,21 @@
 
   function selectRegion(regionId) {
     // Deselect previous
-    $$('.region').forEach(r => r.classList.remove('selected'));
+    $$('.region').forEach(r => {
+      r.classList.remove('selected');
+      r.classList.remove('parent-highlight');
+    });
 
     state.selectedRegion = regionId;
     const el = $(`.region[data-region="${regionId}"]`);
     if (el) el.classList.add('selected');
+
+    // 시·군 선택 시 상위 도 하이라이트
+    var region = REGIONS[regionId];
+    if (region && region.parentRegion) {
+      var parentEl = $(`.region[data-region="${region.parentRegion}"]`);
+      if (parentEl) parentEl.classList.add('parent-highlight');
+    }
 
     // Hide hint
     const hint = $('#mapHint');
@@ -118,7 +128,10 @@
     $('#storyPanel').classList.remove('open');
     $('#overlay').classList.remove('visible');
     document.body.classList.remove('panel-open');
-    $$('.region').forEach(r => r.classList.remove('selected'));
+    $$('.region').forEach(r => {
+      r.classList.remove('selected');
+      r.classList.remove('parent-highlight');
+    });
     state.selectedRegion = null;
   }
 

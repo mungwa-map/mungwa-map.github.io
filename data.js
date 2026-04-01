@@ -101,6 +101,50 @@ const REGIONS = {
     name: '제주특별자치도',
     shortName: '제주',
     description: '바람과 돌과 바다의 섬. 아픈 역사를 품은 문학의 섬.'
+  },
+
+  // ===== 세분화 지역 (시·군 — 파일럿) =====
+  chuncheon: {
+    id: 'chuncheon',
+    name: '춘천',
+    shortName: '춘천',
+    parentRegion: 'gangwon',
+    description: '김유정의 고향. 실레마을에 김유정문학촌이 있는 한국 단편소설의 성지.'
+  },
+  bongpyeong: {
+    id: 'bongpyeong',
+    name: '봉평 (평창)',
+    shortName: '봉평',
+    parentRegion: 'gangwon',
+    description: '이효석의 메밀꽃 필 무렵의 무대. 봉평장과 메밀꽃 축제로 유명.'
+  },
+  gyeongju: {
+    id: 'gyeongju',
+    name: '경주',
+    shortName: '경주',
+    parentRegion: 'gyeongbuk',
+    description: '천년 고도 신라의 수도. 박목월, 김동리의 문학적 고향.'
+  },
+  gunsan: {
+    id: 'gunsan',
+    name: '군산',
+    shortName: '군산',
+    parentRegion: 'jeonbuk',
+    description: '금강 하구의 항구 도시. 채만식 탁류의 배경이 된 근대 역사의 현장.'
+  },
+  hadong: {
+    id: 'hadong',
+    name: '하동',
+    shortName: '하동',
+    parentRegion: 'gyeongnam',
+    description: '섬진강과 지리산이 만나는 곳. 박경리 토지의 무대 악양면이 있다.'
+  },
+  tongyeong: {
+    id: 'tongyeong',
+    name: '통영',
+    shortName: '통영',
+    parentRegion: 'gyeongnam',
+    description: '남해의 보석 같은 항구. 유치환, 김춘수 등 한국 시문학의 요람.'
   }
 };
 
@@ -157,7 +201,7 @@ const LITERARY_DATA = [
   // ── 강원도 ──
   {
     id: 'lit-4',
-    region: 'gangwon',
+    region: 'bongpyeong',
     title: '메밀꽃 필 무렵',
     author: '이효석',
     year: 1936,
@@ -168,7 +212,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-5',
-    region: 'gangwon',
+    region: 'chuncheon',
     title: '동백꽃',
     author: '김유정',
     year: 1936,
@@ -240,7 +284,7 @@ const LITERARY_DATA = [
   // ── 경상북도 ──
   {
     id: 'lit-11',
-    region: 'gyeongbuk',
+    region: 'gyeongju',
     title: '무녀도',
     author: '김동리',
     year: 1936,
@@ -251,7 +295,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-12',
-    region: 'gyeongbuk',
+    region: 'gyeongju',
     title: '나그네',
     author: '박목월',
     year: 1946,
@@ -288,7 +332,7 @@ const LITERARY_DATA = [
   // ── 전라북도 ──
   {
     id: 'lit-14',
-    region: 'jeonbuk',
+    region: 'gunsan',
     title: '탁류',
     author: '채만식',
     year: 1938,
@@ -373,7 +417,7 @@ const LITERARY_DATA = [
   // ── 경상남도 ──
   {
     id: 'lit-20',
-    region: 'gyeongnam',
+    region: 'hadong',
     title: '토지',
     author: '박경리',
     year: 1994,
@@ -384,7 +428,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-21',
-    region: 'gyeongnam',
+    region: 'tongyeong',
     title: '깃발',
     author: '유치환',
     year: 1936,

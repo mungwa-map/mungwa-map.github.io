@@ -39,6 +39,14 @@
   --r-gwangju: #B8C8A5;
   --r-ulsan: #D5C8DE;
   --r-busan: #AABFD2;
+
+  /* 세분화 지역 (시·군) */
+  --r-chuncheon: #A8C4A0;
+  --r-bongpyeong: #B5C8A5;
+  --r-gyeongju: #CDB89A;
+  --r-gunsan: #AFC4A0;
+  --r-hadong: #B8B5C8;
+  --r-tongyeong: #AEB8CE;
 }
 
 [data-theme="dark"] {
@@ -78,6 +86,14 @@
   --r-gwangju: #384530;
   --r-ulsan: #4A4252;
   --r-busan: #344050;
+
+  /* 세분화 지역 (시·군) */
+  --r-chuncheon: #354D30;
+  --r-bongpyeong: #3C4832;
+  --r-gyeongju: #4D4230;
+  --r-gunsan: #354530;
+  --r-hadong: #38354A;
+  --r-tongyeong: #343A4A;
 }
 
 /* ===== Reset & Base ===== */
@@ -228,6 +244,28 @@ body {
   stroke-width: 2;
 }
 
+/* 세분화 지역 (시·군) */
+.region[data-region="chuncheon"] path { fill: var(--r-chuncheon); }
+.region[data-region="bongpyeong"] path { fill: var(--r-bongpyeong); }
+.region[data-region="gyeongju"] path { fill: var(--r-gyeongju); }
+.region[data-region="gunsan"] path { fill: var(--r-gunsan); }
+.region[data-region="hadong"] path { fill: var(--r-hadong); }
+.region[data-region="tongyeong"] path { fill: var(--r-tongyeong); }
+
+.region.sub-region path {
+  stroke-width: 1.8;
+}
+
+.region.sub-region:hover path {
+  stroke-width: 2.2;
+}
+
+/* 시·군 선택 시 상위 도 연동 하이라이트 */
+.region.parent-highlight path {
+  filter: brightness(1.08);
+  stroke-width: 2;
+}
+
 .region:hover path {
   filter: brightness(1.08);
   stroke-width: 2;
@@ -257,6 +295,11 @@ body {
 
 .labels-group text.metro-label {
   font-size: 11px;
+  font-weight: 700;
+}
+
+.labels-group text.sub-label {
+  font-size: 10px;
   font-weight: 700;
 }
 
@@ -826,6 +869,14 @@ body {
 .region[data-region="gwangju"] path { animation-delay: 0.43s; }
 .region[data-region="ulsan"] path { animation-delay: 0.45s; }
 .region[data-region="busan"] path { animation-delay: 0.47s; }
+
+/* Region entrance animation — 세분화 지역 */
+.region[data-region="chuncheon"] path { animation-delay: 0.50s; }
+.region[data-region="bongpyeong"] path { animation-delay: 0.52s; }
+.region[data-region="gyeongju"] path { animation-delay: 0.54s; }
+.region[data-region="gunsan"] path { animation-delay: 0.56s; }
+.region[data-region="hadong"] path { animation-delay: 0.58s; }
+.region[data-region="tongyeong"] path { animation-delay: 0.60s; }
 
 @keyframes regionFadeIn {
   from {
