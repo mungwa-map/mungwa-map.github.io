@@ -7,7 +7,8 @@
     userStories: [],
     likes: {},       // { storyId: true } — 내가 공감한 글
     userSort: 'latest', // 'latest' | 'likes'
-    theme: 'light'
+    theme: 'light',
+    discoveryIndex: -1
   };
 
   // ===== DOM Helpers =====
@@ -34,6 +35,7 @@
     setupWriteForm();
     setupModals();
     setupKeyboard();
+    setupDiscovery();
     updateAllBadges();
     registerSW();
   }
@@ -134,6 +136,7 @@
       r.classList.remove('parent-highlight');
     });
     state.selectedRegion = null;
+
   }
 
   // ===== Stories =====
@@ -541,6 +544,82 @@
     div.textContent = str;
     return div.innerHTML;
   }
+
+  // ===== Discovery (오늘의 발견) =====
+  function setupDiscovery() {
+    // 셔플된 작품 순서 생성
+    state.discoveryOrder = shuffleArray(LITERARY_DATA.map(function(_, i) { return i; }));
+    state.discoveryIndex = 0;
+    showDiscoveryCard();
+
+    // 카드 클릭 → 해당 지역 선택 + 상세보기
+    $('#discoveryCard').addEventListener('click', function(e) {
+      if (e.target.closest('#discoveryNext')) return;
+      var work = LITERARY_DATA[state.discoveryOrder[state.discoveryIndex]];
+      if (!work) return;
+
+      // 지역 하이라이트
+      $$('.region').forEach(function(r) { r.classList.remove('discovery-glow'); });
+      var el = $('.region[data-region="' + work.region + '"]');
+      if (el) el.classList.add('discovery-glow');
+
+      selectRegion(work.region);
+      // 약간의 딜레이 후 상세 모달
+      setTimeout(function() {
+        showDetail({ ...work, storyType: 'literature' });
+      }, 300);
+    });
+
+    // 다음 버튼
+    $('#discoveryNext').addEventListener('click', function(e) {
+      e.stopPropagation();
+      nextDiscovery();
+    });
+  }
+
+  function showDiscoveryCard() {
+    var idx = state.discoveryOrder[state.discoveryIndex];
+    var work = LITERARY_DATA[idx];
+    if (!work) return;
+
+    var excerptEl = $('#discoveryExcerpt');
+    var metaEl = $('#discoveryMeta');
+
+    var place = REGIONS[work.region] ? REGIONS[work.region].shortName : '';
+    excerptEl.textContent = work.excerpt;
+    metaEl.textContent = work.author + ' · \u300E' + work.title + '\u300F · ' + place;
+  }
+
+  function nextDiscovery() {
+    var excerptEl = $('#discoveryExcerpt');
+    var metaEl = $('#discoveryMeta');
+
+    // 이전 하이라이트 제거
+    $$('.region').forEach(function(r) { r.classList.remove('discovery-glow'); });
+
+    // 페이드 아웃
+    excerptEl.classList.add('fade-out');
+    metaEl.classList.add('fade-out');
+
+    setTimeout(function() {
+      state.discoveryIndex = (state.discoveryIndex + 1) % state.discoveryOrder.length;
+      showDiscoveryCard();
+      // 페이드 인
+      excerptEl.classList.remove('fade-out');
+      metaEl.classList.remove('fade-out');
+    }, 350);
+  }
+
+  function shuffleArray(arr) {
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var temp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = temp;
+    }
+    return arr;
+  }
+
 
   // ===== Service Worker =====
   function registerSW() {

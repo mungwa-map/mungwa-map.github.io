@@ -30,6 +30,17 @@
     <!-- ===== 지도 섹션 ===== -->
     <main class="map-section">
       <div class="map-wrapper">
+        <!-- 오늘의 발견 -->
+        <div id="discoveryCard" class="discovery-card">
+          <div class="discovery-card-body">
+            <p class="discovery-excerpt" id="discoveryExcerpt"></p>
+            <p class="discovery-meta" id="discoveryMeta"></p>
+          </div>
+          <button class="discovery-next" id="discoveryNext" aria-label="다른 문장">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+          </button>
+        </div>
+
         <svg id="koreaMap" viewBox="0 0 550 750" xmlns="http://www.w3.org/2000/svg">
           <!-- 바다 배경 -->
           <rect class="map-sea" x="0" y="0" width="550" height="750" rx="12"/>
@@ -319,6 +330,7 @@
 
         <!-- 지도 안내 -->
         <p class="map-hint" id="mapHint">지역을 선택해보세요</p>
+
       </div>
     </main>
 
