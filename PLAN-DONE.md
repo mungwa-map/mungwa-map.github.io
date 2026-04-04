@@ -256,8 +256,8 @@
 - [x] 담양 (damyang) — 정철, 송순
 
 ### 미반영 (SVG/CSS — 별도 작업 필요)
-- [ ] index.html SVG path + 라벨 + 뱃지 (7개 신규 지역)
-- [ ] style.css 지역 스타일 (7개 신규 지역)
+- [x] index.html SVG path + 라벨 + 뱃지 (7개 신규 지역) → 아래 phase에서 완료
+- [x] style.css 지역 스타일 (7개 신규 지역) → 아래 phase에서 완료
 
 ### 진행 로그
 | 시간 | 작업 내용 |
@@ -267,3 +267,42 @@
 | 04-05 | 배치 4~10 직접 일괄 작성 (에이전트 불안정으로 전환) |
 | 04-05 | 보충 24편 + 에이전트 검증 17편 추가 |
 | 04-05 | **최종: 150개 작품, 39개 지역 (신규 119편, 7개 지역)** |
+
+---
+
+## 신규 7개 지역 SVG + CSS + 광역시 통합 (2026-04-05 완료)
+
+### SVG (index.html)
+- [x] 속초 — path, label, badge
+- [x] 영양 — path, label, badge
+- [x] 전주 — path, label, badge
+- [x] 남해 — path, label, badge
+- [x] 해남 — path, label, badge
+- [x] 강진 — path, label, badge
+- [x] 담양 — path, label, badge
+
+### CSS (style.css)
+- [x] 7개 지역 색상 변수 (라이트 + 다크 테마)
+- [x] 7개 지역 fill 룰 추가
+
+### 상세 지도 (detail-maps.js)
+- [x] 7개 지역 상세 지도 데이터 (districts, rivers, mountains, landmarks, workPositions)
+
+### 배치 보정
+- [x] 10개 시·군 위치 조정 — PIP 검증으로 모든 vertex가 부모 도 안에 위치하도록
+- [x] 도 라벨/뱃지 centroid 기반 중앙 재배치 (9개 도)
+
+### 광역시 → sub-region 전환
+- [x] data.js: 8개 광역시에 parentRegion 추가 (서울·인천→경기, 세종·대전→충남, 대구→경북, 광주→전남, 울산·부산→경남)
+- [x] index.html: region metro → region sub-region, metro-label → sub-label, 광역시 개별 뱃지 삭제
+- [x] style.css: .region.metro, .metro-label 규칙 삭제
+- [x] app.js: metro-label 분기 제거
+
+### 진행 로그
+| 시간 | 작업 내용 |
+|------|----------|
+| 04-05 | 3개 에이전트 병렬: SVG path+label+badge, CSS 변수, detail-maps 데이터 |
+| 04-05 | fill CSS 룰 누락 → 검정색 표시 수정 |
+| 04-05 | 도 라벨/뱃지 겹침 해소 + centroid 기반 중앙 재배치 |
+| 04-05 | PIP 검증으로 10개 시·군 부모 도 밖 vertex 수정 (22/22 OK) |
+| 04-05 | 광역시 sub-region 전환: data.js parentRegion + HTML/CSS/JS metro 코드 제거 |
