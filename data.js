@@ -145,6 +145,69 @@ const REGIONS = {
     shortName: '통영',
     parentRegion: 'gyeongnam',
     description: '남해의 보석 같은 항구. 유치환, 김춘수 등 한국 시문학의 요람.'
+  },
+  gangneung: {
+    id: 'gangneung',
+    name: '강릉',
+    shortName: '강릉',
+    parentRegion: 'gangwon',
+    description: '관동별곡의 무대. 경포대와 허난설헌 생가가 있는 동해안 문학의 거점.'
+  },
+  yangpyeong: {
+    id: 'yangpyeong',
+    name: '양평',
+    shortName: '양평',
+    parentRegion: 'gyeonggi',
+    description: '소나기의 배경. 황순원문학촌 소나기마을이 있는 서정의 고장.'
+  },
+  okcheon: {
+    id: 'okcheon',
+    name: '옥천',
+    shortName: '옥천',
+    parentRegion: 'chungbuk',
+    description: '정지용의 고향. 향수의 넓은 벌과 실개천의 원풍경.'
+  },
+  buyeo: {
+    id: 'buyeo',
+    name: '부여',
+    shortName: '부여',
+    parentRegion: 'chungnam',
+    description: '백제의 마지막 수도. 신동엽의 역사 의식이 길러진 고도.'
+  },
+  andong: {
+    id: 'andong',
+    name: '안동',
+    shortName: '안동',
+    parentRegion: 'gyeongbuk',
+    description: '유교 문화의 본향. 이육사의 저항 정신이 태어난 땅.'
+  },
+  namwon: {
+    id: 'namwon',
+    name: '남원',
+    shortName: '남원',
+    parentRegion: 'jeonbuk',
+    description: '춘향전과 혼불의 무대. 한국 서사문학의 성지.'
+  },
+  gochang: {
+    id: 'gochang',
+    name: '고창',
+    shortName: '고창',
+    parentRegion: 'jeonbuk',
+    description: '미당 서정주의 고향. 선운사와 국화밭이 어우러진 시의 고장.'
+  },
+  beolgyo: {
+    id: 'beolgyo',
+    name: '벌교',
+    shortName: '벌교',
+    parentRegion: 'jeonnam',
+    description: '태백산맥의 중심 무대. 소화다리와 읍내에 소설의 흔적이 남아 있다.'
+  },
+  mokpo: {
+    id: 'mokpo',
+    name: '목포',
+    shortName: '목포',
+    parentRegion: 'jeonnam',
+    description: '한국 최초 여성 소설가 박화성의 고향. 개항과 근대의 기억이 서린 항구 도시.'
   }
 };
 
@@ -188,7 +251,7 @@ const LITERARY_DATA = [
   // ── 경기 ──
   {
     id: 'lit-25',
-    region: 'gyeonggi',
+    region: 'yangpyeong',
     title: '소나기',
     author: '황순원',
     year: 1953,
@@ -225,7 +288,7 @@ const LITERARY_DATA = [
   // ── 충청북도 ──
   {
     id: 'lit-6',
-    region: 'chungbuk',
+    region: 'okcheon',
     title: '향수',
     author: '정지용',
     year: 1927,
@@ -271,7 +334,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-10',
-    region: 'chungnam',
+    region: 'buyeo',
     title: '껍데기는 가라',
     author: '신동엽',
     year: 1967,
@@ -343,7 +406,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-15',
-    region: 'jeonbuk',
+    region: 'namwon',
     title: '혼불',
     author: '최명희',
     year: 1996,
@@ -354,7 +417,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-16',
-    region: 'jeonbuk',
+    region: 'gochang',
     title: '국화 옆에서',
     author: '서정주',
     year: 1948,
@@ -380,7 +443,7 @@ const LITERARY_DATA = [
   // ── 전라남도 ──
   {
     id: 'lit-17',
-    region: 'jeonnam',
+    region: 'beolgyo',
     title: '태백산맥',
     author: '조정래',
     year: 1989,
@@ -391,7 +454,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-18',
-    region: 'jeonnam',
+    region: 'beolgyo',
     title: '무진기행',
     author: '김승옥',
     year: 1964,
@@ -484,5 +547,44 @@ const LITERARY_DATA = [
     location: '제주 남쪽 바다',
     excerpt: '이어도사나, 이어도사나.\n바다 저 너머 이어도가 있다고 해녀들은 노래했다.',
     description: '전설의 섬 이어도를 소재로 이상향에 대한 인간의 갈망을 그린 소설. 제주 해녀들의 이어도 노래가 이야기의 중심 모티프이다.'
+  },
+
+  // ── 강릉 ──
+  {
+    id: 'lit-29',
+    region: 'gangneung',
+    title: '관동별곡',
+    author: '정철',
+    year: 1580,
+    genre: '가사',
+    location: '강릉 경포대',
+    excerpt: '강호에 병이 깊어 죽림에 누웠더니\n관동 팔백 리에 방면을 맡기시니',
+    description: '관동 지방의 절경을 유람하며 노래한 기행가사의 최고봉. 강원도 관찰사로 부임한 정철이 경포대 등 관동팔경을 순유한 기록이다. 강릉 경포대에서 관동별곡의 풍경을 느낄 수 있다.'
+  },
+
+  // ── 안동 ──
+  {
+    id: 'lit-30',
+    region: 'andong',
+    title: '광야',
+    author: '이육사',
+    year: 1946,
+    genre: '시',
+    location: '안동 도산면',
+    excerpt: '까마득한 날에\n하늘이 처음 열리고\n어디 닭 우는 소리 들렸으랴',
+    description: '암흑 같은 식민지 현실에서 광복의 그날을 노래한 저항시의 대표작. 안동 도산면에서 태어난 이육사의 불굴의 의지가 담겨 있다. 안동에 이육사문학관이 있다.'
+  },
+
+  // ── 목포 ──
+  {
+    id: 'lit-31',
+    region: 'mokpo',
+    title: '추석전야',
+    author: '박화성',
+    year: 1925,
+    genre: '소설',
+    location: '목포 구도심',
+    excerpt: '목포의 낯은 보기에 참 애처로웁다.',
+    description: '목포 방직공장 여공의 삶을 그린 한국 최초 여성 소설가의 등단작. 일제강점기 목포의 노동 현실과 여성의 고단함이 담겨 있다. 목포에 박화성 문학거리가 조성되어 있다.'
   }
 ];

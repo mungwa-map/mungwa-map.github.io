@@ -47,6 +47,15 @@
   --r-gunsan: #AFC4A0;
   --r-hadong: #B8B5C8;
   --r-tongyeong: #AEB8CE;
+  --r-gangneung: #9EC4B5;
+  --r-yangpyeong: #C8C0A8;
+  --r-okcheon: #BFBAA2;
+  --r-buyeo: #A8C0AD;
+  --r-andong: #C4B0A0;
+  --r-namwon: #B5BFA8;
+  --r-gochang: #A8B8A0;
+  --r-beolgyo: #B8B8C0;
+  --r-mokpo: #C0B8A8;
 }
 
 [data-theme="dark"] {
@@ -94,6 +103,15 @@
   --r-gunsan: #354530;
   --r-hadong: #38354A;
   --r-tongyeong: #343A4A;
+  --r-gangneung: #2E4840;
+  --r-yangpyeong: #4A4538;
+  --r-okcheon: #454030;
+  --r-buyeo: #304538;
+  --r-andong: #483E35;
+  --r-namwon: #3A4232;
+  --r-gochang: #344030;
+  --r-beolgyo: #383842;
+  --r-mokpo: #424038;
 }
 
 /* ===== Reset & Base ===== */
@@ -251,6 +269,15 @@ body {
 .region[data-region="gunsan"] path { fill: var(--r-gunsan); }
 .region[data-region="hadong"] path { fill: var(--r-hadong); }
 .region[data-region="tongyeong"] path { fill: var(--r-tongyeong); }
+.region[data-region="gangneung"] path { fill: var(--r-gangneung); }
+.region[data-region="yangpyeong"] path { fill: var(--r-yangpyeong); }
+.region[data-region="okcheon"] path { fill: var(--r-okcheon); }
+.region[data-region="buyeo"] path { fill: var(--r-buyeo); }
+.region[data-region="andong"] path { fill: var(--r-andong); }
+.region[data-region="namwon"] path { fill: var(--r-namwon); }
+.region[data-region="gochang"] path { fill: var(--r-gochang); }
+.region[data-region="beolgyo"] path { fill: var(--r-beolgyo); }
+.region[data-region="mokpo"] path { fill: var(--r-mokpo); }
 
 .region.sub-region path {
   stroke-width: 1.8;
@@ -1015,6 +1042,15 @@ body {
 .region[data-region="gunsan"] path { animation-delay: 0.56s; }
 .region[data-region="hadong"] path { animation-delay: 0.58s; }
 .region[data-region="tongyeong"] path { animation-delay: 0.60s; }
+.region[data-region="gangneung"] path { animation-delay: 0.62s; }
+.region[data-region="yangpyeong"] path { animation-delay: 0.64s; }
+.region[data-region="okcheon"] path { animation-delay: 0.66s; }
+.region[data-region="buyeo"] path { animation-delay: 0.68s; }
+.region[data-region="andong"] path { animation-delay: 0.70s; }
+.region[data-region="namwon"] path { animation-delay: 0.72s; }
+.region[data-region="gochang"] path { animation-delay: 0.74s; }
+.region[data-region="beolgyo"] path { animation-delay: 0.76s; }
+.region[data-region="mokpo"] path { animation-delay: 0.78s; }
 
 @keyframes regionFadeIn {
   from {
