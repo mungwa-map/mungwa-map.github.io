@@ -534,6 +534,16 @@ body {
   color: #3D6B4F;
 }
 
+.badge-subregion {
+  background: #E8E0D4;
+  color: var(--text-secondary);
+  font-size: 0.65rem;
+}
+
+[data-theme="dark"] .badge-subregion {
+  background: #3D362D;
+}
+
 [data-theme="dark"] .badge-user {
   background: #1E2E22;
   color: #7DB88D;

@@ -14,6 +14,17 @@
   const $ = (sel) => document.querySelector(sel);
   const $$ = (sel) => document.querySelectorAll(sel);
 
+  // ===== Region Helpers =====
+  function getChildRegionIds(regionId) {
+    return Object.keys(REGIONS).filter(function(id) {
+      return REGIONS[id].parentRegion === regionId;
+    });
+  }
+
+  function getRegionAndChildIds(regionId) {
+    return [regionId].concat(getChildRegionIds(regionId));
+  }
+
   // ===== Initialize =====
   function init() {
     loadState();
@@ -135,12 +146,17 @@
     litContainer.innerHTML = '';
     userContainer.innerHTML = '';
 
-    // 문학작품 영역
-    var literary = LITERARY_DATA.filter(function(w) { return w.region === regionId; });
+    // 문학작품 영역 (상위 도면 하위 지역 포함)
+    var allIds = getRegionAndChildIds(regionId);
+    var literary = LITERARY_DATA.filter(function(w) { return allIds.indexOf(w.region) !== -1; });
     $('#litSectionTitle').textContent = '\uBB38\uD559\uC791\uD488 ' + literary.length + '\uD3B8';
 
     if (literary.length === 0) {
-      litContainer.innerHTML = '<p class="section-empty">\uB4F1\uB85D\uB41C \uBB38\uD559\uC791\uD488\uC774 \uC5C6\uC2B5\uB2C8\uB2E4</p>';
+      litContainer.innerHTML =
+        '<div class="empty-state">' +
+        '<p>\uC544\uC9C1 \uB4F1\uB85D\uB41C \uBB38\uD559\uC791\uD488\uC774 \uC5C6\uC2B5\uB2C8\uB2E4</p>' +
+        '<p class="empty-sub">\uC774 \uC9C0\uC5ED\uC758 \uCCAB \uC774\uC57C\uAE30\uB97C \uB0A8\uACA8\uBCF4\uC138\uC694</p>' +
+        '</div>';
     } else {
       literary.forEach(function(w, i) {
         var card = createStoryCard({ ...w, storyType: 'literature' });
@@ -149,8 +165,8 @@
       });
     }
 
-    // 사용자 이야기 영역
-    var user = state.userStories.filter(function(s) { return s.region === regionId; });
+    // 사용자 이야기 영역 (상위 도면 하위 지역 포함)
+    var user = state.userStories.filter(function(s) { return allIds.indexOf(s.region) !== -1; });
 
     // 정렬
     if (state.userSort === 'likes') {
@@ -196,8 +212,15 @@
     var card = document.createElement('div');
     card.className = 'story-card fade-in';
 
+    // 하위 지역 작품이면 서브리전 태그 표시
+    var subRegionTag = '';
+    if (story.region !== state.selectedRegion && REGIONS[story.region]) {
+      subRegionTag = '<span class="badge badge-subregion">' + escHtml(REGIONS[story.region].shortName) + '</span> ';
+    }
+
     if (story.storyType === 'literature') {
       card.innerHTML =
+        subRegionTag +
         '<span class="badge badge-literature">' + escHtml(story.genre) + '</span>' +
         '<h4 class="card-title">' + escHtml(story.title) + '</h4>' +
         '<p class="card-meta">' + escHtml(story.author) + ' \u00B7 ' + story.year + '</p>' +
@@ -214,6 +237,7 @@
       var likeCount = story.likeCount || 0;
       var liked = state.likes[story.id] ? ' liked' : '';
       card.innerHTML =
+        subRegionTag +
         '<span class="badge badge-user">' + getCategoryLabel(story.category) + '</span>' +
         '<h4 class="card-title">' + escHtml(story.title) + '</h4>' +
         '<p class="card-meta">' + escHtml(story.author) + ' \u00B7 ' + formatDate(story.date) + '</p>' +
@@ -389,7 +413,8 @@
     // 관련 작품 드롭다운 채우기
     var select = $('#relatedWorkSelect');
     select.innerHTML = '<option value="">\uC791\uD488 \uC120\uD0DD \uC548 \uD568 \u2014 \uC790\uC720 \uAE00</option>';
-    var works = LITERARY_DATA.filter(function(w) { return w.region === state.selectedRegion; });
+    var workIds = getRegionAndChildIds(state.selectedRegion);
+    var works = LITERARY_DATA.filter(function(w) { return workIds.indexOf(w.region) !== -1; });
     works.forEach(function(w) {
       var opt = document.createElement('option');
       opt.value = w.id;
@@ -450,8 +475,9 @@
   // ===== Map Badges =====
   function updateAllBadges() {
     Object.keys(REGIONS).forEach(function(regionId) {
-      var litCount = LITERARY_DATA.filter(function(w) { return w.region === regionId; }).length;
-      var userCount = state.userStories.filter(function(s) { return s.region === regionId; }).length;
+      var allIds = getRegionAndChildIds(regionId);
+      var litCount = LITERARY_DATA.filter(function(w) { return allIds.indexOf(w.region) !== -1; }).length;
+      var userCount = state.userStories.filter(function(s) { return allIds.indexOf(s.region) !== -1; }).length;
       var total = litCount + userCount;
 
       var badge = $('[data-badge="' + regionId + '"]');
