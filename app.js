@@ -189,12 +189,47 @@
     svg.setAttribute('viewBox', (minX - pad) + ' ' + (minY - pad) + ' ' + vbW + ' ' + vbH);
     svg.classList.add('zoomed');
 
-    // 대상 지역 표시
+    // 글귀 카드 숨김
+    var dc = $('#discoveryCard');
+    if (dc) dc.classList.add('hidden');
+
+    // 대상 지역 표시 + 하위 지역 뱃지 표시 (크기는 rAF에서 보정)
     allIds.forEach(function(id) {
       var el = $('.region[data-region="' + id + '"]');
       if (el) el.classList.add('zoom-target');
       var label = $('[data-label="' + id + '"]');
       if (label) label.classList.add('zoom-label');
+      var badge = $('[data-badge="' + id + '"]');
+      if (badge && REGIONS[id] && REGIONS[id].parentRegion) {
+        badge.classList.add('zoom-badge');
+      }
+    });
+
+    // 다음 프레임: 실제 렌더링 크기 기반으로 컴포넌트 정규화
+    var _vbW = vbW;
+    requestAnimationFrame(function() {
+      var svgRect = svg.getBoundingClientRect();
+      var rs = svgRect.width / _vbW; // 현재 줌 렌더 스케일
+      if (rs <= 0) return;
+
+      // 라벨 — 화면 기준 고정 px
+      $$('.zoom-label').forEach(function(label) {
+        var target = label.classList.contains('sub-label') ? 12
+          : label.classList.contains('metro-label') ? 13 : 16;
+        label.style.fontSize = (target / rs) + 'px';
+        label.style.strokeWidth = (2.5 / rs) + 'px';
+      });
+
+      // 뱃지 — 화면 기준 고정 px
+      $$('.zoom-badge').forEach(function(badge) {
+        var bc = badge.querySelector('circle');
+        if (bc) bc.setAttribute('r', 10 / rs);
+        var bt = badge.querySelector('text');
+        if (bt) {
+          bt.style.fontSize = (11 / rs) + 'px';
+          bt.setAttribute('dy', (4 / rs));
+        }
+      });
     });
     if (region && region.parentRegion) {
       var pEl = $('.region[data-region="' + region.parentRegion + '"]');
@@ -225,9 +260,6 @@
     var mapData = (typeof DETAIL_MAPS !== 'undefined') ? DETAIL_MAPS[regionId] : null;
 
     var pinnedWorks = LITERARY_DATA.filter(function(w) { return w.region === regionId; });
-    var areaWorks = parentId
-      ? LITERARY_DATA.filter(function(w) { return w.region === parentId; })
-      : [];
 
     state.detailMap = null;
     var mapDiv = $('#detailMap');
@@ -291,42 +323,57 @@
       }
 
 
-      // 작품 마커
-      if (mapData.workPositions) {
+      // 작품 마커 — 해당 구/면 라벨 위에 배치
+      if (mapData.districts && pinnedWorks.length > 0) {
+        var districtLabels = mapData.districts.filter(function(d) { return d.labelX != null; });
+
+        // 작품 → 구/면 매칭 (이름 매칭 → 최근접 fallback)
+        function findDistrict(w) {
+          var matched = null;
+          districtLabels.forEach(function(d) {
+            if (d.name.indexOf(w.district) !== -1) matched = d;
+          });
+          if (!matched && mapData.workPositions && mapData.workPositions[w.id]) {
+            var pos = mapData.workPositions[w.id];
+            var minD = Infinity;
+            districtLabels.forEach(function(d) {
+              var dx = d.labelX - pos.x, dy = d.labelY - pos.y;
+              var dist = dx * dx + dy * dy;
+              if (dist < minD) { minD = dist; matched = d; }
+            });
+          }
+          return matched;
+        }
+
+        // 구/면별 그룹핑
+        var byDist = {};
         pinnedWorks.forEach(function(w) {
-          var pos = mapData.workPositions[w.id];
-          if (!pos) return;
+          var d = findDistrict(w);
+          if (!d) return;
+          if (!byDist[d.name]) byDist[d.name] = { district: d, works: [] };
+          byDist[d.name].works.push(w);
+        });
+
+        // 렌더링 — 구/면당 동그라미 1개, 클릭 시 랜덤 작품
+        Object.keys(byDist).forEach(function(key) {
+          var info = byDist[key];
+          var d = info.district;
+          var works = info.works;
+
           var g = document.createElementNS(ns, 'g');
           g.setAttribute('class', 'dm-work');
-          g.setAttribute('transform', 'translate(' + pos.x + ',' + pos.y + ')');
+          g.setAttribute('transform', 'translate(' + d.labelX + ',' + (d.labelY - 14) + ')');
           g.style.cursor = 'pointer';
 
-          // 핀 원
           var c = document.createElementNS(ns, 'circle');
-          c.setAttribute('r', '6');
+          c.setAttribute('r', '3');
           c.setAttribute('class', 'dm-work-dot');
           g.appendChild(c);
 
-          // 제목
-          var title = document.createElementNS(ns, 'text');
-          title.setAttribute('y', '-12');
-          title.setAttribute('text-anchor', 'middle');
-          title.setAttribute('class', 'dm-work-title');
-          title.textContent = w.title;
-          g.appendChild(title);
-
-          // 작가
-          var author = document.createElementNS(ns, 'text');
-          author.setAttribute('y', '-12');
-          author.setAttribute('dy', '11');
-          author.setAttribute('text-anchor', 'middle');
-          author.setAttribute('class', 'dm-work-author');
-          author.textContent = w.author;
-          g.appendChild(author);
-
           g.addEventListener('click', function(e) {
             e.stopPropagation();
-            showDetail(Object.assign({}, w, { storyType: 'literature' }));
+            var pick = works[Math.floor(Math.random() * works.length)];
+            showDetail(Object.assign({}, pick, { storyType: 'literature' }));
           });
           svg.appendChild(g);
         });
@@ -355,6 +402,28 @@
           bgRect.setAttribute('width', fitW);
           bgRect.setAttribute('height', fitH);
         }
+        // 다음 프레임: SVG 실제 렌더링 크기로 글자 정규화
+        var _fitW = fitW, _fitH = fitH;
+        requestAnimationFrame(function() {
+          var svgRect = svg.getBoundingClientRect();
+          var rs = Math.min(svgRect.width / _fitW, svgRect.height / _fitH);
+          if (rs <= 0) return;
+          svg.querySelectorAll('.dm-district-label').forEach(function(t) {
+            t.style.fontSize = (11 / rs) + 'px';
+          });
+          svg.querySelectorAll('.dm-work-title').forEach(function(t) {
+            t.style.fontSize = (10 / rs) + 'px';
+          });
+          svg.querySelectorAll('.dm-work-author').forEach(function(t) {
+            t.style.fontSize = (8 / rs) + 'px';
+          });
+          svg.querySelectorAll('.dm-work-dot').forEach(function(c) {
+            c.setAttribute('r', 8 / rs);
+          });
+          svg.querySelectorAll('.dm-river-label').forEach(function(t) {
+            t.style.fontSize = (8 / rs) + 'px';
+          });
+        });
       }
     });
 
@@ -364,24 +433,6 @@
     titleEl.textContent = region.name;
     mapDiv.appendChild(titleEl);
 
-    // 도 전역 작품 — 하단 리스트
-    if (areaWorks.length > 0) {
-      var list = document.createElement('div');
-      list.className = 'dm-area-list';
-      var pName = REGIONS[parentId] ? REGIONS[parentId].shortName : '';
-      list.innerHTML = '<div class="dm-area-label">' + escHtml(pName) + ' 전역</div>';
-      areaWorks.forEach(function(w) {
-        var row = document.createElement('div');
-        row.className = 'dm-area-row';
-        row.innerHTML = '<span class="dm-area-name">' + escHtml(w.title) + '</span>' +
-          '<span class="dm-area-writer">' + escHtml(w.author) + '</span>';
-        row.addEventListener('click', function() {
-          showDetail(Object.assign({}, w, { storyType: 'literature' }));
-        });
-        list.appendChild(row);
-      });
-      mapDiv.appendChild(list);
-    }
 
     state.detailMap = true;
 
@@ -405,12 +456,27 @@
     svg.classList.remove('zoomed');
 
     $$('.zoom-target').forEach(function(el) { el.classList.remove('zoom-target'); });
-    $$('.zoom-label').forEach(function(el) { el.classList.remove('zoom-label'); });
+    $$('.zoom-label').forEach(function(el) {
+      el.classList.remove('zoom-label');
+      el.style.fontSize = '';
+      el.style.strokeWidth = '';
+    });
+    $$('.zoom-badge').forEach(function(el) {
+      var bc = el.querySelector('circle');
+      if (bc) bc.setAttribute('r', '9');
+      var bt = el.querySelector('text');
+      if (bt) { bt.style.fontSize = ''; bt.setAttribute('dy', '3.5'); }
+      el.classList.remove('zoom-badge');
+    });
     $$('.zoom-sibling').forEach(function(el) { el.classList.remove('zoom-sibling'); });
 
     $('#workMarkers').innerHTML = '';
     $('#zoomBackBtn').classList.remove('visible');
     $('#storyOpenBtn').classList.remove('visible');
+
+    // 글귀 카드 복원
+    var dc = $('#discoveryCard');
+    if (dc) dc.classList.remove('hidden');
 
     // 선택 상태 초기화
     $$('.region').forEach(r => {
@@ -852,6 +918,7 @@
   // ===== Map Badges =====
   function updateAllBadges() {
     Object.keys(REGIONS).forEach(function(regionId) {
+      var region = REGIONS[regionId];
       var allIds = getRegionAndChildIds(regionId);
       var litCount = LITERARY_DATA.filter(function(w) { return allIds.indexOf(w.region) !== -1; }).length;
       var userCount = state.userStories.filter(function(s) { return allIds.indexOf(s.region) !== -1; }).length;
@@ -864,6 +931,10 @@
           badge.classList.add('visible');
         } else {
           badge.classList.remove('visible');
+        }
+        // 세분화 지역은 메인 지도에서 숨���
+        if (region.parentRegion) {
+          badge.classList.add('sub-badge');
         }
       }
     });

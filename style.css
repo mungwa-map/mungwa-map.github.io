@@ -313,7 +313,7 @@ body {
 /* Labels */
 .labels-group text {
   font-family: 'Noto Serif KR', serif;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   fill: var(--text-secondary);
   text-anchor: middle;
@@ -327,13 +327,13 @@ body {
 }
 
 .labels-group text.metro-label {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   stroke-width: 2px;
 }
 
 .labels-group text.sub-label {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   stroke-width: 2px;
 }
@@ -538,14 +538,69 @@ body {
 }
 
 #koreaMap.zoomed .labels-group text.zoom-label {
-  opacity: 0.8;
+  opacity: 1;
   transition: opacity 0.25s ease;
 }
 
-/* 줌 시 뱃지 숨김 */
+/* 메인 지도에서 세분화 지역 뱃지 숨김 */
+.count-badge.sub-badge {
+  opacity: 0 !important;
+  pointer-events: none;
+}
+
+/* 줌 시 도 뱃지 숨김 */
 #koreaMap.zoomed .badges-group .count-badge {
   opacity: 0;
   transition: opacity 0.2s ease;
+}
+
+/* 줌 시 하위 지역 뱃지 표시 — 메인 지도와 동일 크기 유지 */
+#koreaMap.zoomed .badges-group .count-badge.zoom-badge {
+  opacity: 1 !important;
+  pointer-events: auto;
+}
+
+/* 줌 시 글귀 카드 숨김 */
+.discovery-card.hidden {
+  display: none;
+}
+
+/* 위치 동그라미 마커 */
+.location-dot {
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.location-dot.zoom-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loc-circle {
+  fill: var(--accent);
+  stroke: var(--bg-primary);
+  stroke-width: 1.5;
+  transition: r 0.2s ease, fill 0.2s ease;
+}
+
+.loc-pulse {
+  fill: var(--accent);
+  opacity: 0;
+  animation: locPulse 3s ease-out infinite;
+}
+
+.location-dot:hover .loc-circle {
+  r: 5.5;
+  fill: var(--accent-hover);
+}
+
+@keyframes locPulse {
+  0% { r: 4; opacity: 0.4; }
+  100% { r: 12; opacity: 0; }
+}
+
+[data-theme="dark"] .loc-circle {
+  stroke: var(--bg-secondary);
 }
 
 /* 작품 마커 */
@@ -684,9 +739,9 @@ body {
 
 .dm-district-label {
   font-family: 'Noto Serif KR', serif;
-  font-size: 9px;
+  font-size: 7px;
   font-weight: 600;
-  fill: var(--text-secondary);
+  fill: var(--text-tertiary);
   text-anchor: middle;
   pointer-events: none;
   paint-order: stroke fill;
@@ -766,12 +821,12 @@ body {
 }
 
 .dm-work:hover .dm-work-dot {
-  r: 8;
+  opacity: 0.7;
 }
 
 .dm-work-title {
   font-family: 'Noto Serif KR', serif;
-  font-size: 9px;
+  font-size: 6px;
   font-weight: 700;
   fill: var(--text-primary);
   paint-order: stroke fill;
@@ -783,7 +838,7 @@ body {
 
 .dm-work-author {
   font-family: 'Noto Serif KR', serif;
-  font-size: 7px;
+  font-size: 5px;
   fill: var(--text-secondary);
   paint-order: stroke fill;
   stroke: var(--bg-primary);
@@ -1488,31 +1543,51 @@ body {
 .discovery-card {
   display: flex;
   align-items: stretch;
-  background: var(--accent-bg);
-  border-left: 3px solid var(--accent);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  background: #FAF8F4;
+  border: none;
+  border-radius: var(--radius-sm);
   margin-bottom: 14px;
   cursor: pointer;
-  transition: box-shadow 0.3s, transform 0.2s;
+  box-shadow:
+    0 0 0 1px rgba(44,24,16,0.04),
+    0 1px 3px rgba(44,24,16,0.03),
+    0 6px 20px rgba(44,24,16,0.04);
+  transition: box-shadow 0.35s, transform 0.25s;
   overflow: hidden;
+  position: relative;
+}
+
+.discovery-card::before {
+  content: '';
+  position: absolute;
+  top: 14px;
+  left: 15px;
+  width: 2px;
+  height: calc(100% - 28px);
+  background: linear-gradient(180deg, rgba(139,105,20,0.18), rgba(139,105,20,0.04));
+  border-radius: 1px;
 }
 
 .discovery-card:hover {
-  box-shadow: var(--shadow-md);
+  box-shadow:
+    0 0 0 1px rgba(44,24,16,0.06),
+    0 2px 6px rgba(44,24,16,0.05),
+    0 8px 28px rgba(44,24,16,0.07);
   transform: translateY(-1px);
 }
 
 .discovery-card-body {
   flex: 1;
-  padding: 16px 14px;
+  padding: 20px 18px 18px 28px;
   min-width: 0;
 }
 
 .discovery-excerpt {
   font-family: 'Noto Serif KR', serif;
   font-size: 0.92rem;
-  line-height: 1.75;
-  color: var(--text-primary);
+  line-height: 1.9;
+  color: var(--text-secondary);
+  letter-spacing: -0.01em;
   white-space: pre-line;
   display: -webkit-box;
   -webkit-line-clamp: 3;
@@ -1526,9 +1601,10 @@ body {
 }
 
 .discovery-meta {
-  font-size: 0.78rem;
-  color: var(--text-secondary);
-  margin-top: 8px;
+  font-size: 0.72rem;
+  color: var(--text-tertiary);
+  margin-top: 12px;
+  letter-spacing: 0.04em;
   transition: opacity 0.35s;
 }
 
@@ -1540,19 +1616,32 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
+  width: 38px;
   flex-shrink: 0;
   border: none;
   background: transparent;
   color: var(--text-tertiary);
   cursor: pointer;
-  transition: color 0.2s, background 0.2s;
-  border-left: 1px solid var(--border);
+  transition: color 0.25s, opacity 0.25s;
+  border-left: 1px solid rgba(44,24,16,0.04);
+  opacity: 0.35;
 }
 
 .discovery-next:hover {
   color: var(--accent);
-  background: rgba(139, 105, 20, 0.06);
+  opacity: 0.8;
+}
+
+[data-theme="dark"] .discovery-card {
+  background: #242018;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.04),
+    0 1px 3px rgba(0,0,0,0.12),
+    0 6px 20px rgba(0,0,0,0.15);
+}
+
+[data-theme="dark"] .discovery-card::before {
+  background: linear-gradient(180deg, rgba(212,168,50,0.2), rgba(212,168,50,0.04));
 }
 
 .discovery-next svg {
@@ -1634,7 +1723,7 @@ body {
   }
 
   .dm-svg {
-    max-width: 650px;
+    max-width: 850px;
   }
 
   .dm-area-list {
