@@ -191,18 +191,19 @@ body {
 /* ===== Map Section ===== */
 .map-section {
   padding-top: 68px;
-  min-height: 100dvh;
+  height: 100dvh;
   display: flex;
-  align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .map-wrapper {
   position: relative;
   width: 100%;
-  max-width: 480px;
-  margin: 0 auto;
-  padding: 16px;
+  /* 뷰포트 높이에서 헤더+여백+디스커버리카드+힌트 빼고 SVG 비율(550:780)로 최대 너비 산출 */
+  max-width: min(520px, calc((100dvh - 170px) * 0.705));
+  margin: auto;
+  padding: 8px;
 }
 
 #koreaMap {
@@ -318,16 +319,23 @@ body {
   text-anchor: middle;
   pointer-events: none;
   transition: fill 0.3s;
+  paint-order: stroke fill;
+  stroke: var(--bg-primary);
+  stroke-width: 2.5px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 .labels-group text.metro-label {
   font-size: 11px;
   font-weight: 700;
+  stroke-width: 2px;
 }
 
 .labels-group text.sub-label {
   font-size: 10px;
   font-weight: 700;
+  stroke-width: 2px;
 }
 
 /* Badges */
@@ -495,6 +503,371 @@ body {
 
 .write-btn:hover {
   background: var(--accent-hover);
+}
+
+/* ===== SVG Map Zoom ===== */
+.map-wrapper {
+  position: relative;
+}
+
+/* viewBox는 CSS transition 안 됨 — JS에서 처리 */
+#koreaMap {
+  transition: opacity 0.3s ease;
+}
+
+/* 줌 시 타겟 외 지역 처리 */
+#koreaMap.zoomed .region:not(.zoom-target):not(.zoom-sibling) {
+  opacity: 0.07;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+#koreaMap.zoomed .region.zoom-sibling {
+  opacity: 0.35;
+  transition: opacity 0.35s ease;
+}
+
+#koreaMap.zoomed .region.zoom-target {
+  transition: opacity 0.35s ease;
+}
+
+/* 줌 시 라벨 — 비타겟 숨김 */
+#koreaMap.zoomed .labels-group text {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+#koreaMap.zoomed .labels-group text.zoom-label {
+  opacity: 0.8;
+  transition: opacity 0.25s ease;
+}
+
+/* 줌 시 뱃지 숨김 */
+#koreaMap.zoomed .badges-group .count-badge {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+/* 작품 마커 */
+.work-marker {
+  cursor: pointer;
+}
+
+.work-marker .marker-dot {
+  fill: var(--accent);
+  stroke: var(--bg-primary);
+  stroke-width: 2;
+  transition: r 0.15s ease, fill 0.15s ease;
+}
+
+.work-marker .marker-label {
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 700;
+  fill: var(--text-primary);
+  paint-order: stroke fill;
+  stroke: var(--sea);
+  stroke-width: 3px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.work-marker:hover .marker-dot {
+  fill: var(--accent-hover);
+  r: 5.5;
+}
+
+[data-theme="dark"] .work-marker .marker-dot {
+  stroke: var(--bg-primary);
+}
+
+[data-theme="dark"] .work-marker .marker-label {
+  stroke: var(--bg-secondary);
+}
+
+/* 줌 복귀 버튼 */
+.zoom-back-btn {
+  display: none;
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 5px 12px;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-family: 'Noto Serif KR', serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  z-index: 5;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s;
+}
+
+.zoom-back-btn.visible {
+  display: block;
+}
+
+.zoom-back-btn:hover {
+  background: var(--accent-bg);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* 이야기 보기 버튼 */
+.story-open-btn {
+  display: none;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 5px 14px;
+  border: none;
+  border-radius: 100px;
+  background: var(--accent);
+  color: #FFF;
+  font-family: 'Noto Serif KR', serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  z-index: 5;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s;
+}
+
+.story-open-btn.visible {
+  display: block;
+}
+
+.story-open-btn:hover {
+  background: var(--accent-hover);
+}
+
+/* ===== 시·군 상세 SVG 지도 ===== */
+.detail-map {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--bg-primary);
+}
+
+.detail-map.visible {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* SVG 지도 */
+.dm-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.dm-bg {
+  fill: var(--sea);
+}
+
+/* 구/면 경계 */
+.dm-district {
+  fill: var(--bg-card);
+  stroke: var(--region-stroke);
+  stroke-width: 1;
+  transition: fill 0.2s;
+}
+
+.dm-district:hover {
+  fill: var(--accent-bg);
+}
+
+.dm-district-label {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 9px;
+  font-weight: 600;
+  fill: var(--text-secondary);
+  text-anchor: middle;
+  pointer-events: none;
+  paint-order: stroke fill;
+  stroke: var(--bg-card);
+  stroke-width: 2px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* 하천 */
+.dm-river {
+  fill: none;
+  stroke: var(--sea);
+  stroke-width: 3;
+  stroke-linecap: round;
+  opacity: 0.8;
+}
+
+.dm-river-label {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 7px;
+  fill: #7BA1B5;
+  font-style: italic;
+  pointer-events: none;
+  paint-order: stroke fill;
+  stroke: var(--bg-primary);
+  stroke-width: 2px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* 산 */
+.dm-mountain polygon {
+  fill: #9CB89A;
+  stroke: #7A9E78;
+  stroke-width: 0.8;
+}
+
+.dm-mountain text {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 7px;
+  fill: #6B8F69;
+  font-weight: 600;
+  paint-order: stroke fill;
+  stroke: var(--bg-primary);
+  stroke-width: 2px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* 랜드마크 */
+.dm-landmark circle {
+  fill: var(--text-tertiary);
+}
+
+.dm-landmark text {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 6.5px;
+  fill: var(--text-tertiary);
+  paint-order: stroke fill;
+  stroke: var(--bg-primary);
+  stroke-width: 2px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* 작품 마커 */
+.dm-work {
+  cursor: pointer;
+}
+
+.dm-work-dot {
+  fill: var(--accent);
+  stroke: #fff;
+  stroke-width: 2;
+  transition: r 0.15s;
+}
+
+.dm-work:hover .dm-work-dot {
+  r: 8;
+}
+
+.dm-work-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 9px;
+  font-weight: 700;
+  fill: var(--text-primary);
+  paint-order: stroke fill;
+  stroke: var(--bg-primary);
+  stroke-width: 3px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.dm-work-author {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 7px;
+  fill: var(--text-secondary);
+  paint-order: stroke fill;
+  stroke: var(--bg-primary);
+  stroke-width: 2px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* 다크 모드 */
+[data-theme="dark"] .dm-bg { fill: var(--sea); }
+[data-theme="dark"] .dm-district { fill: var(--bg-card); stroke: var(--region-stroke); }
+[data-theme="dark"] .dm-mountain polygon { fill: #3E5A3C; stroke: #4D6E4B; }
+[data-theme="dark"] .dm-mountain text { fill: #6B9068; }
+[data-theme="dark"] .dm-river { stroke: var(--sea); }
+[data-theme="dark"] .dm-river-label { fill: #4A7A8F; }
+
+/* 지역명 */
+.dm-title {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  font-family: 'Noto Serif KR', serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  background: var(--bg-card);
+  padding: 4px 14px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  pointer-events: none;
+}
+
+/* 도 전역 작품 리스트 */
+.dm-area-list {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  right: 8px;
+  z-index: 10;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+  box-shadow: var(--shadow-md);
+  max-height: 110px;
+  overflow-y: auto;
+}
+
+.dm-area-label {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: var(--text-tertiary);
+  margin-bottom: 4px;
+}
+
+.dm-area-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 4px 6px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+
+.dm-area-row:hover {
+  background: var(--accent-bg);
+}
+
+.dm-area-name {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.dm-area-writer {
+  font-size: 0.6rem;
+  color: var(--text-tertiary);
+  margin-left: auto;
 }
 
 /* ===== Story Cards ===== */
@@ -821,11 +1194,49 @@ body {
   margin-top: 16px;
 }
 
+/* Reader story count on literary cards */
+.card-reader-count {
+  font-size: 0.75rem;
+  color: var(--accent);
+  margin-top: 8px;
+  font-weight: 600;
+}
+
 /* Related work tag on user cards */
 .card-related {
   font-size: 0.75rem;
   color: var(--accent);
   margin-top: 3px;
+}
+
+/* Detail modal — location with map link */
+.detail-location {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.map-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+  padding: 3px 8px;
+  border: 1px solid var(--accent);
+  border-radius: 100px;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.map-link:hover {
+  background: var(--accent);
+  color: #FFF;
 }
 
 /* Detail modal — unified meta */
@@ -888,16 +1299,16 @@ body {
   margin-top: 3px;
 }
 
-/* "나도 한마디" button */
+/* "나도 한마디" button — primary write entry */
 .write-comment-btn {
   display: block;
   width: 100%;
   margin-top: 20px;
-  padding: 12px;
-  border: 1.5px solid var(--accent);
+  padding: 14px;
+  border: none;
   border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--accent);
+  background: var(--accent);
+  color: #FFF;
   font-size: 0.9rem;
   font-weight: 700;
   cursor: pointer;
@@ -905,7 +1316,7 @@ body {
 }
 
 .write-comment-btn:hover {
-  background: var(--accent);
+  background: var(--accent-hover);
   color: #FFF;
 }
 
@@ -1218,7 +1629,8 @@ body {
   }
 
   .map-wrapper {
-    padding: 8px;
+    padding: 4px;
+    max-width: min(100%, calc((100dvh - 140px) * 0.705));
   }
 
   .region-title {

@@ -8,7 +8,8 @@
     likes: {},       // { storyId: true } — 내가 공감한 글
     userSort: 'latest', // 'latest' | 'likes'
     theme: 'light',
-    discoveryIndex: -1
+    discoveryIndex: -1,
+    detailMap: null   // Leaflet 인스턴스 (시·군 상세 타일 지도)
   };
 
   // ===== DOM Helpers =====
@@ -105,13 +106,17 @@
     const hint = $('#mapHint');
     if (hint) hint.classList.add('hidden');
 
-    showPanel(regionId);
+    zoomToRegion(regionId);
   }
 
   // ===== Panel =====
   function setupPanel() {
     $('#panelClose').addEventListener('click', closePanel);
     $('#overlay').addEventListener('click', closePanel);
+    $('#zoomBackBtn').addEventListener('click', zoomOut);
+    $('#storyOpenBtn').addEventListener('click', function() {
+      if (state.selectedRegion) showPanel(state.selectedRegion);
+    });
   }
 
   function showPanel(regionId) {
@@ -128,15 +133,385 @@
   }
 
   function closePanel() {
+    // 패널만 닫음 — 줌 상태 유지
     $('#storyPanel').classList.remove('open');
     $('#overlay').classList.remove('visible');
     document.body.classList.remove('panel-open');
+  }
+
+  // ===== SVG Map Zoom =====
+  var ORIGINAL_VIEWBOX = '0 0 550 780';
+
+  function zoomToRegion(regionId) {
+    var region = REGIONS[regionId];
+
+    // 시·군(parentRegion 있음) → 상세 지도
+    if (region && region.parentRegion) {
+      showDetailMap(regionId);
+      return;
+    }
+
+    // 하위 지역 없는 광역시/도 → 바로 상세 지도
+    var children = getChildRegionIds(regionId);
+    if (children.length === 0) {
+      showDetailMap(regionId);
+      return;
+    }
+
+    var svg = $('#koreaMap');
+    var allIds = getRegionAndChildIds(regionId);
+
+    // bbox에 상위 도도 포함
+    var bboxIds = allIds.slice();
+    if (region && region.parentRegion && bboxIds.indexOf(region.parentRegion) === -1) {
+      bboxIds.push(region.parentRegion);
+    }
+
+    // 합산 bounding box
+    var minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    bboxIds.forEach(function(id) {
+      var el = $('.region[data-region="' + id + '"]');
+      if (!el) return;
+      var path = el.querySelector('path');
+      if (!path) return;
+      var bbox = path.getBBox();
+      minX = Math.min(minX, bbox.x);
+      minY = Math.min(minY, bbox.y);
+      maxX = Math.max(maxX, bbox.x + bbox.width);
+      maxY = Math.max(maxY, bbox.y + bbox.height);
+    });
+
+    if (minX === Infinity) return;
+
+    var pad = 30;
+    var vbW = (maxX - minX) + pad * 2;
+    var vbH = (maxY - minY) + pad * 2;
+    svg.setAttribute('viewBox', (minX - pad) + ' ' + (minY - pad) + ' ' + vbW + ' ' + vbH);
+    svg.classList.add('zoomed');
+
+    // 대상 지역 표시
+    allIds.forEach(function(id) {
+      var el = $('.region[data-region="' + id + '"]');
+      if (el) el.classList.add('zoom-target');
+      var label = $('[data-label="' + id + '"]');
+      if (label) label.classList.add('zoom-label');
+    });
+    if (region && region.parentRegion) {
+      var pEl = $('.region[data-region="' + region.parentRegion + '"]');
+      if (pEl) pEl.classList.add('zoom-target');
+    }
+
+    // 시·군 클릭 시 형제 지역도 반투명으로 표시
+    if (region && region.parentRegion) {
+      getChildRegionIds(region.parentRegion).forEach(function(sibId) {
+        if (sibId === regionId) return;
+        var sibEl = $('.region[data-region="' + sibId + '"]');
+        if (sibEl) sibEl.classList.add('zoom-sibling');
+        var sibLabel = $('[data-label="' + sibId + '"]');
+        if (sibLabel) sibLabel.classList.add('zoom-label');
+      });
+    }
+
+    // 도(道) 레벨에서는 마커 없이 지역 선택만
+    // UI — 줌백 버튼만 (이야기 버튼은 상세 지도에서만)
+    $('#zoomBackBtn').classList.add('visible');
+    var hint = $('#mapHint');
+    if (hint) hint.classList.add('hidden');
+  }
+
+  function showDetailMap(regionId) {
+    var region = REGIONS[regionId];
+    var parentId = region ? region.parentRegion : null;
+    var mapData = (typeof DETAIL_MAPS !== 'undefined') ? DETAIL_MAPS[regionId] : null;
+
+    var pinnedWorks = LITERARY_DATA.filter(function(w) { return w.region === regionId; });
+    var areaWorks = parentId
+      ? LITERARY_DATA.filter(function(w) { return w.region === parentId; })
+      : [];
+
+    state.detailMap = null;
+    var mapDiv = $('#detailMap');
+    mapDiv.innerHTML = '';
+    mapDiv.classList.add('visible');
+
+    // SVG 생성
+    var ns = 'http://www.w3.org/2000/svg';
+    var vb = mapData ? mapData.viewBox : '0 0 400 500';
+    var svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('viewBox', vb);
+    svg.setAttribute('class', 'dm-svg');
+
+    // 배경
+    var bg = document.createElementNS(ns, 'rect');
+    bg.setAttribute('class', 'dm-bg');
+    bg.setAttribute('x', '0'); bg.setAttribute('y', '0');
+    bg.setAttribute('width', vb.split(' ')[2]);
+    bg.setAttribute('height', vb.split(' ')[3]);
+    bg.setAttribute('rx', '8');
+    svg.appendChild(bg);
+
+    if (mapData) {
+      // 구/면 경계
+      if (mapData.districts) {
+        var dg = document.createElementNS(ns, 'g');
+        dg.setAttribute('class', 'dm-districts');
+        mapData.districts.forEach(function(d) {
+          var p = document.createElementNS(ns, 'path');
+          p.setAttribute('d', d.path);
+          p.setAttribute('class', 'dm-district');
+          dg.appendChild(p);
+          if (d.labelX != null) {
+            var t = document.createElementNS(ns, 'text');
+            t.setAttribute('x', d.labelX);
+            t.setAttribute('y', d.labelY);
+            t.setAttribute('class', 'dm-district-label');
+            t.textContent = d.name;
+            dg.appendChild(t);
+          }
+        });
+        svg.appendChild(dg);
+      }
+
+      // 하천/바다
+      if (mapData.rivers) {
+        mapData.rivers.forEach(function(r) {
+          var p = document.createElementNS(ns, 'path');
+          p.setAttribute('d', r.path);
+          p.setAttribute('class', 'dm-river');
+          svg.appendChild(p);
+          if (r.labelX != null) {
+            var t = document.createElementNS(ns, 'text');
+            t.setAttribute('x', r.labelX);
+            t.setAttribute('y', r.labelY);
+            t.setAttribute('class', 'dm-river-label');
+            t.textContent = r.name;
+            svg.appendChild(t);
+          }
+        });
+      }
+
+      // 산
+      if (mapData.mountains) {
+        mapData.mountains.forEach(function(m) {
+          var g = document.createElementNS(ns, 'g');
+          g.setAttribute('class', 'dm-mountain');
+          g.setAttribute('transform', 'translate(' + m.x + ',' + m.y + ')');
+          var tri = document.createElementNS(ns, 'polygon');
+          tri.setAttribute('points', '-8,5 0,-7 8,5');
+          g.appendChild(tri);
+          var t = document.createElementNS(ns, 'text');
+          t.setAttribute('y', '14');
+          t.setAttribute('text-anchor', 'middle');
+          t.textContent = m.name;
+          g.appendChild(t);
+          svg.appendChild(g);
+        });
+      }
+
+      // 랜드마크
+      if (mapData.landmarks) {
+        mapData.landmarks.forEach(function(l) {
+          var g = document.createElementNS(ns, 'g');
+          g.setAttribute('class', 'dm-landmark');
+          g.setAttribute('transform', 'translate(' + l.x + ',' + l.y + ')');
+          var c = document.createElementNS(ns, 'circle');
+          c.setAttribute('r', '2.5');
+          g.appendChild(c);
+          var t = document.createElementNS(ns, 'text');
+          t.setAttribute('x', '5');
+          t.setAttribute('y', '3');
+          t.textContent = l.name;
+          g.appendChild(t);
+          svg.appendChild(g);
+        });
+      }
+
+      // 작품 마커
+      if (mapData.workPositions) {
+        pinnedWorks.forEach(function(w) {
+          var pos = mapData.workPositions[w.id];
+          if (!pos) return;
+          var g = document.createElementNS(ns, 'g');
+          g.setAttribute('class', 'dm-work');
+          g.setAttribute('transform', 'translate(' + pos.x + ',' + pos.y + ')');
+          g.style.cursor = 'pointer';
+
+          // 핀 원
+          var c = document.createElementNS(ns, 'circle');
+          c.setAttribute('r', '6');
+          c.setAttribute('class', 'dm-work-dot');
+          g.appendChild(c);
+
+          // 제목
+          var title = document.createElementNS(ns, 'text');
+          title.setAttribute('y', '-12');
+          title.setAttribute('text-anchor', 'middle');
+          title.setAttribute('class', 'dm-work-title');
+          title.textContent = w.title;
+          g.appendChild(title);
+
+          // 작가
+          var author = document.createElementNS(ns, 'text');
+          author.setAttribute('y', '-12');
+          author.setAttribute('dy', '11');
+          author.setAttribute('text-anchor', 'middle');
+          author.setAttribute('class', 'dm-work-author');
+          author.textContent = w.author;
+          g.appendChild(author);
+
+          g.addEventListener('click', function(e) {
+            e.stopPropagation();
+            showDetail(Object.assign({}, w, { storyType: 'literature' }));
+          });
+          svg.appendChild(g);
+        });
+      }
+    }
+
+    mapDiv.appendChild(svg);
+
+    // viewBox를 실제 콘텐츠 영역에 맞게 자동 조정
+    requestAnimationFrame(function() {
+      var bgRect = svg.querySelector('.dm-bg');
+      // 배경 rect를 bbox 계산에서 제외
+      if (bgRect) bgRect.setAttribute('display', 'none');
+      var bbox = svg.getBBox();
+      if (bgRect) bgRect.removeAttribute('display');
+      if (bbox.width > 0 && bbox.height > 0) {
+        var pad = 20;
+        var fitX = bbox.x - pad;
+        var fitY = bbox.y - pad;
+        var fitW = bbox.width + pad * 2;
+        var fitH = bbox.height + pad * 2;
+        svg.setAttribute('viewBox', fitX + ' ' + fitY + ' ' + fitW + ' ' + fitH);
+        if (bgRect) {
+          bgRect.setAttribute('x', fitX);
+          bgRect.setAttribute('y', fitY);
+          bgRect.setAttribute('width', fitW);
+          bgRect.setAttribute('height', fitH);
+        }
+      }
+    });
+
+    // 지역명 오버레이
+    var titleEl = document.createElement('div');
+    titleEl.className = 'dm-title';
+    titleEl.textContent = region.name;
+    mapDiv.appendChild(titleEl);
+
+    // 도 전역 작품 — 하단 리스트
+    if (areaWorks.length > 0) {
+      var list = document.createElement('div');
+      list.className = 'dm-area-list';
+      var pName = REGIONS[parentId] ? REGIONS[parentId].shortName : '';
+      list.innerHTML = '<div class="dm-area-label">' + escHtml(pName) + ' 전역</div>';
+      areaWorks.forEach(function(w) {
+        var row = document.createElement('div');
+        row.className = 'dm-area-row';
+        row.innerHTML = '<span class="dm-area-name">' + escHtml(w.title) + '</span>' +
+          '<span class="dm-area-writer">' + escHtml(w.author) + '</span>';
+        row.addEventListener('click', function() {
+          showDetail(Object.assign({}, w, { storyType: 'literature' }));
+        });
+        list.appendChild(row);
+      });
+      mapDiv.appendChild(list);
+    }
+
+    state.detailMap = true;
+
+    $('#zoomBackBtn').classList.add('visible');
+    $('#storyOpenBtn').classList.add('visible');
+    var hint = $('#mapHint');
+    if (hint) hint.classList.add('hidden');
+  }
+
+  function zoomOut() {
+    // 상세 지도 정리
+    if (state.detailMap) {
+      state.detailMap = null;
+      var dm = $('#detailMap');
+      dm.innerHTML = '';
+      dm.classList.remove('visible');
+    }
+
+    var svg = $('#koreaMap');
+    svg.setAttribute('viewBox', ORIGINAL_VIEWBOX);
+    svg.classList.remove('zoomed');
+
+    $$('.zoom-target').forEach(function(el) { el.classList.remove('zoom-target'); });
+    $$('.zoom-label').forEach(function(el) { el.classList.remove('zoom-label'); });
+    $$('.zoom-sibling').forEach(function(el) { el.classList.remove('zoom-sibling'); });
+
+    $('#workMarkers').innerHTML = '';
+    $('#zoomBackBtn').classList.remove('visible');
+    $('#storyOpenBtn').classList.remove('visible');
+
+    // 선택 상태 초기화
     $$('.region').forEach(r => {
       r.classList.remove('selected');
       r.classList.remove('parent-highlight');
     });
     state.selectedRegion = null;
 
+    // 패널도 닫기
+    $('#storyPanel').classList.remove('open');
+    $('#overlay').classList.remove('visible');
+    document.body.classList.remove('panel-open');
+  }
+
+  function addWorkMarkers(regionId) {
+    var group = $('#workMarkers');
+    group.innerHTML = '';
+
+    var allIds = getRegionAndChildIds(regionId);
+    var works = LITERARY_DATA.filter(function(w) { return allIds.indexOf(w.region) !== -1; });
+
+    var byRegion = {};
+    works.forEach(function(w) {
+      if (!byRegion[w.region]) byRegion[w.region] = [];
+      byRegion[w.region].push(w);
+    });
+
+    Object.keys(byRegion).forEach(function(rId) {
+      var rWorks = byRegion[rId];
+      var el = $('.region[data-region="' + rId + '"]');
+      if (!el) return;
+      var path = el.querySelector('path');
+      if (!path) return;
+      var bbox = path.getBBox();
+      var cx = bbox.x + bbox.width / 2;
+      var cy = bbox.y + bbox.height / 2;
+
+      rWorks.forEach(function(w, i) {
+        var total = rWorks.length;
+        var offsetX = (i - (total - 1) / 2) * 15;
+
+        var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.setAttribute('class', 'work-marker');
+        g.setAttribute('transform', 'translate(' + (cx + offsetX) + ',' + cy + ')');
+
+        var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('class', 'marker-dot');
+        circle.setAttribute('r', '4');
+        g.appendChild(circle);
+
+        var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('class', 'marker-label');
+        text.setAttribute('y', '-7');
+        text.setAttribute('text-anchor', 'middle');
+        text.setAttribute('font-size', '7');
+        text.textContent = w.title;
+        g.appendChild(text);
+
+        g.addEventListener('click', function(e) {
+          e.stopPropagation();
+          showDetail({ ...w, storyType: 'literature' });
+        });
+
+        group.appendChild(g);
+      });
+    });
   }
 
   // ===== Stories =====
@@ -154,6 +529,15 @@
     var literary = LITERARY_DATA.filter(function(w) { return allIds.indexOf(w.region) !== -1; });
     $('#litSectionTitle').textContent = '\uBB38\uD559\uC791\uD488 ' + literary.length + '\uD3B8';
 
+    // 작품별 독자 이야기 수 집계
+    var allUserStories = state.userStories.filter(function(s) { return allIds.indexOf(s.region) !== -1; });
+    var userCountByWork = {};
+    allUserStories.forEach(function(s) {
+      if (s.relatedWork) {
+        userCountByWork[s.relatedWork] = (userCountByWork[s.relatedWork] || 0) + 1;
+      }
+    });
+
     if (literary.length === 0) {
       litContainer.innerHTML =
         '<div class="empty-state">' +
@@ -162,48 +546,50 @@
         '</div>';
     } else {
       literary.forEach(function(w, i) {
-        var card = createStoryCard({ ...w, storyType: 'literature' });
+        var card = createStoryCard({ ...w, storyType: 'literature', readerCount: userCountByWork[w.id] || 0 });
         card.style.animationDelay = (i * 0.05) + 's';
         litContainer.appendChild(card);
       });
     }
 
-    // 사용자 이야기 영역 (상위 도면 하위 지역 포함)
-    var user = state.userStories.filter(function(s) { return allIds.indexOf(s.region) !== -1; });
+    // 자유 이야기 영역 (작품 미연결 글만)
+    var freeStories = allUserStories.filter(function(s) { return !s.relatedWork; });
 
     // 정렬
     if (state.userSort === 'likes') {
-      user.sort(function(a, b) { return (b.likeCount || 0) - (a.likeCount || 0); });
+      freeStories.sort(function(a, b) { return (b.likeCount || 0) - (a.likeCount || 0); });
     } else {
-      user.sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
+      freeStories.sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
     }
 
-    var sortHtml = user.length > 1
-      ? '<div class="sort-toggle">' +
-        '<button class="sort-btn' + (state.userSort === 'latest' ? ' active' : '') + '" data-sort="latest">\uCD5C\uC2E0\uC21C</button>' +
-        '<button class="sort-btn' + (state.userSort === 'likes' ? ' active' : '') + '" data-sort="likes">\uACF5\uAC10\uC21C</button>' +
-        '</div>'
-      : '';
-
-    $('#userSectionTitle').innerHTML = '\uC774 \uACF3\uC758 \uC774\uC57C\uAE30 ' + user.length + '\uAC1C' + sortHtml;
-
-    // 정렬 버튼 이벤트
-    $$('#userSectionTitle .sort-btn').forEach(function(btn) {
-      btn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        state.userSort = btn.dataset.sort;
-        renderStories();
-      });
-    });
-
-    if (user.length === 0) {
-      userContainer.innerHTML =
-        '<div class="empty-state">' +
-        '<p>\uC544\uC9C1 \uC774\uC57C\uAE30\uAC00 \uC5C6\uC2B5\uB2C8\uB2E4</p>' +
-        '<p class="empty-sub">\uCCAB \uBC88\uC9F8 \uC774\uC57C\uAE30\uB97C \uB0A8\uACA8\uBCF4\uC138\uC694</p>' +
-        '</div>';
+    // 자유 이야기가 있을 때만 섹션 표시
+    var divider = $('.panel-divider');
+    if (freeStories.length === 0) {
+      userContainer.innerHTML = '';
+      $('#userSectionTitle').innerHTML = '';
+      if (divider) divider.style.display = 'none';
     } else {
-      user.forEach(function(s, i) {
+      if (divider) divider.style.display = '';
+
+      var sortHtml = freeStories.length > 1
+        ? '<div class="sort-toggle">' +
+          '<button class="sort-btn' + (state.userSort === 'latest' ? ' active' : '') + '" data-sort="latest">\uCD5C\uC2E0\uC21C</button>' +
+          '<button class="sort-btn' + (state.userSort === 'likes' ? ' active' : '') + '" data-sort="likes">\uACF5\uAC10\uC21C</button>' +
+          '</div>'
+        : '';
+
+      $('#userSectionTitle').innerHTML = '\uC790\uC720 \uC774\uC57C\uAE30 ' + freeStories.length + '\uAC1C' + sortHtml;
+
+      // 정렬 버튼 이벤트
+      $$('#userSectionTitle .sort-btn').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          state.userSort = btn.dataset.sort;
+          renderStories();
+        });
+      });
+
+      freeStories.forEach(function(s, i) {
         var card = createStoryCard({ ...s, storyType: 'user' });
         card.style.animationDelay = (i * 0.05) + 's';
         userContainer.appendChild(card);
@@ -222,13 +608,17 @@
     }
 
     if (story.storyType === 'literature') {
+      var readerCountHtml = story.readerCount > 0
+        ? '<p class="card-reader-count">\uB3C5\uC790 \uC774\uC57C\uAE30 ' + story.readerCount + '\uAC1C</p>'
+        : '';
       card.innerHTML =
         subRegionTag +
         '<span class="badge badge-literature">' + escHtml(story.genre) + '</span>' +
         '<h4 class="card-title">' + escHtml(story.title) + '</h4>' +
         '<p class="card-meta">' + escHtml(story.author) + ' \u00B7 ' + story.year + '</p>' +
         '<p class="card-location">' + escHtml(story.location) + '</p>' +
-        '<p class="card-excerpt">' + escHtml(story.excerpt) + '</p>';
+        '<p class="card-excerpt">' + escHtml(story.excerpt) + '</p>' +
+        readerCountHtml;
     } else {
       var relatedHtml = '';
       if (story.relatedWork) {
@@ -237,6 +627,9 @@
           relatedHtml = '<p class="card-related">\u300E' + escHtml(work.title) + '\u300F \uC5D0 \uB300\uD55C \uC774\uC57C\uAE30</p>';
         }
       }
+      var locationHtml = story.location
+        ? '<p class="card-location">' + escHtml(story.location) + '</p>'
+        : '';
       var likeCount = story.likeCount || 0;
       var liked = state.likes[story.id] ? ' liked' : '';
       card.innerHTML =
@@ -245,6 +638,7 @@
         '<h4 class="card-title">' + escHtml(story.title) + '</h4>' +
         '<p class="card-meta">' + escHtml(story.author) + ' \u00B7 ' + formatDate(story.date) + '</p>' +
         relatedHtml +
+        locationHtml +
         '<p class="card-excerpt">' + escHtml(story.content) + '</p>' +
         '<div class="card-footer">' +
         '<button class="like-btn' + liked + '" data-like-id="' + story.id + '">\u2665 ' + (likeCount > 0 ? likeCount : '') + '</button>' +
@@ -290,11 +684,20 @@
         relatedHtml += '</div>';
       }
 
+      // 길찾기 링크 (좌표가 있는 경우)
+      var mapLinkHtml = '';
+      if (story.coords) {
+        var mapUrl = 'https://map.naver.com/p/search/' + encodeURIComponent(story.location) +
+          '?c=' + story.coords.lng + ',' + story.coords.lat + ',15,0,0,0,dh';
+        mapLinkHtml = '<a class="map-link" href="' + mapUrl + '" target="_blank" rel="noopener">\uD83D\uDCCD \uAE38\uCC3E\uAE30</a>';
+      }
+
       content.innerHTML =
         '<button class="modal-close-btn modal-close-top" data-close="detailModal">&times;</button>' +
         '<span class="badge badge-literature">' + escHtml(story.genre) + '</span>' +
         '<h3>' + escHtml(story.title) + '</h3>' +
-        '<p class="detail-meta">' + escHtml(story.author) + ' \u00B7 ' + story.year + ' \u00B7 ' + escHtml(story.location) + '</p>' +
+        '<p class="detail-meta">' + escHtml(story.author) + ' \u00B7 ' + story.year + '</p>' +
+        '<p class="detail-location">' + escHtml(story.location) + mapLinkHtml + '</p>' +
         '<div class="detail-excerpt">' + escHtml(story.excerpt) + '</div>' +
         '<p class="detail-desc">' + escHtml(story.description) + '</p>' +
         relatedHtml +
@@ -309,12 +712,17 @@
         }
       }
 
+      var userLocationHtml = story.location
+        ? '<p class="detail-location">' + escHtml(story.location) + '</p>'
+        : '';
+
       content.innerHTML =
         '<button class="modal-close-btn modal-close-top" data-close="detailModal">&times;</button>' +
         '<span class="badge badge-user">' + getCategoryLabel(story.category) + '</span>' +
         '<h3>' + escHtml(story.title) + '</h3>' +
         '<p class="detail-meta">' + escHtml(story.author) + ' \u00B7 ' + formatDate(story.date) + '</p>' +
         workLinkHtml +
+        userLocationHtml +
         '<div class="detail-content">' + escHtml(story.content).replace(/\n/g, '<br>') + '</div>' +
         '<button class="delete-btn" data-delete-id="' + story.id + '">\uC0AD\uC81C\uD558\uAE30</button>';
     }
@@ -390,6 +798,7 @@
         content: form.content.value.trim(),
         category: form.category.value,
         relatedWork: form.relatedWork.value || null,
+        location: form.location.value.trim() || null,
         date: new Date().toISOString(),
         storyType: 'user'
       };

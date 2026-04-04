@@ -1,10 +1,11 @@
-const CACHE_NAME = 'literary-map-v1';
+const CACHE_NAME = 'literary-map-v8';
 const ASSETS = [
   './',
   './index.html',
   './style.css',
   './app.js',
   './data.js',
+  './detail-maps.js',
   './icon.svg'
 ];
 
