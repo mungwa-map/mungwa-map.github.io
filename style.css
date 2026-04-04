@@ -1617,6 +1617,36 @@ body {
   body.panel-open .map-section {
     padding-right: 440px;
   }
+
+  .map-wrapper {
+    max-width: calc((100dvh - 100px) * 0.705);
+  }
+
+  /* 상세 지도 — 상단 컨트롤 아래로 배치 */
+  .detail-map.visible {
+    position: fixed;
+    top: 68px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 0;
+    padding-top: 48px;
+  }
+
+  .dm-svg {
+    max-width: 650px;
+  }
+
+  .dm-area-list {
+    max-width: 500px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+  }
+
+  body.panel-open .detail-map.visible {
+    right: 440px;
+  }
 }
 
 @media (max-width: 768px) {

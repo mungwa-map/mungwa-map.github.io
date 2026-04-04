@@ -290,41 +290,6 @@
         });
       }
 
-      // 산
-      if (mapData.mountains) {
-        mapData.mountains.forEach(function(m) {
-          var g = document.createElementNS(ns, 'g');
-          g.setAttribute('class', 'dm-mountain');
-          g.setAttribute('transform', 'translate(' + m.x + ',' + m.y + ')');
-          var tri = document.createElementNS(ns, 'polygon');
-          tri.setAttribute('points', '-8,5 0,-7 8,5');
-          g.appendChild(tri);
-          var t = document.createElementNS(ns, 'text');
-          t.setAttribute('y', '14');
-          t.setAttribute('text-anchor', 'middle');
-          t.textContent = m.name;
-          g.appendChild(t);
-          svg.appendChild(g);
-        });
-      }
-
-      // 랜드마크
-      if (mapData.landmarks) {
-        mapData.landmarks.forEach(function(l) {
-          var g = document.createElementNS(ns, 'g');
-          g.setAttribute('class', 'dm-landmark');
-          g.setAttribute('transform', 'translate(' + l.x + ',' + l.y + ')');
-          var c = document.createElementNS(ns, 'circle');
-          c.setAttribute('r', '2.5');
-          g.appendChild(c);
-          var t = document.createElementNS(ns, 'text');
-          t.setAttribute('x', '5');
-          t.setAttribute('y', '3');
-          t.textContent = l.name;
-          g.appendChild(t);
-          svg.appendChild(g);
-        });
-      }
 
       // 작품 마커
       if (mapData.workPositions) {
