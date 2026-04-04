@@ -4,6 +4,7 @@ const REGIONS = {
     id: 'seoul',
     name: '서울특별시',
     shortName: '서울',
+    parentRegion: 'gyeonggi',
     description: '근현대 문학의 중심지. 수많은 시인과 소설가들이 이곳에서 작품 활동을 했다.',
     coords: { lat: 37.5665, lng: 126.9780 }
   },
@@ -18,6 +19,7 @@ const REGIONS = {
     id: 'incheon',
     name: '인천광역시',
     shortName: '인천',
+    parentRegion: 'gyeonggi',
     description: '바다와 하늘을 잇는 관문. 개항의 역사가 서린 항구 도시.',
     coords: { lat: 37.4563, lng: 126.7052 }
   },
@@ -39,6 +41,7 @@ const REGIONS = {
     id: 'sejong',
     name: '세종특별자치시',
     shortName: '세종',
+    parentRegion: 'chungnam',
     description: '새로운 행정수도. 금강이 흐르는 미래의 도시.',
     coords: { lat: 36.4800, lng: 127.0000 }
   },
@@ -53,6 +56,7 @@ const REGIONS = {
     id: 'daejeon',
     name: '대전광역시',
     shortName: '대전',
+    parentRegion: 'chungnam',
     description: '과학과 교통의 도시. 한밭에서 피어나는 문화.',
     coords: { lat: 36.3504, lng: 127.3845 }
   },
@@ -67,6 +71,7 @@ const REGIONS = {
     id: 'daegu',
     name: '대구광역시',
     shortName: '대구',
+    parentRegion: 'gyeongbuk',
     description: '분지의 뜨거운 열정. 저항 문학과 근대의 기억.',
     coords: { lat: 35.8714, lng: 128.6014 }
   },
@@ -81,6 +86,7 @@ const REGIONS = {
     id: 'gwangju',
     name: '광주광역시',
     shortName: '광주',
+    parentRegion: 'jeonnam',
     description: '민주와 예술의 도시. 5월의 기억을 품은 문학의 성지.',
     coords: { lat: 35.1595, lng: 126.8526 }
   },
@@ -95,6 +101,7 @@ const REGIONS = {
     id: 'ulsan',
     name: '울산광역시',
     shortName: '울산',
+    parentRegion: 'gyeongnam',
     description: '고래와 바다의 도시. 처용의 전설이 살아 있는 곳.',
     coords: { lat: 35.5384, lng: 129.3114 }
   },
@@ -109,6 +116,7 @@ const REGIONS = {
     id: 'busan',
     name: '부산광역시',
     shortName: '부산',
+    parentRegion: 'gyeongnam',
     description: '피란의 기억과 바다의 낭만이 공존하는 항구 도시.',
     coords: { lat: 35.1796, lng: 129.0756 }
   },

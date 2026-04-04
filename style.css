@@ -56,6 +56,13 @@
   --r-gochang: #A8B8A0;
   --r-beolgyo: #B8B8C0;
   --r-mokpo: #C0B8A8;
+  --r-sokcho: #A0C4C0;
+  --r-yeongyang: #C0B4A8;
+  --r-jeonju: #C4C0A8;
+  --r-namhae: #A8B8C8;
+  --r-haenam: #B0C4A8;
+  --r-gangjin: #B8C0B0;
+  --r-damyang: #A8C8A0;
 }
 
 [data-theme="dark"] {
@@ -112,6 +119,13 @@
   --r-gochang: #344030;
   --r-beolgyo: #383842;
   --r-mokpo: #424038;
+  --r-sokcho: #2E4845;
+  --r-yeongyang: #453E35;
+  --r-jeonju: #484530;
+  --r-namhae: #303A48;
+  --r-haenam: #354535;
+  --r-gangjin: #3A4238;
+  --r-damyang: #304830;
 }
 
 /* ===== Reset & Base ===== */
@@ -258,11 +272,6 @@ body {
 .region[data-region="ulsan"] path { fill: var(--r-ulsan); }
 .region[data-region="busan"] path { fill: var(--r-busan); }
 
-/* 광역시 구분선 강조 */
-.region.metro path {
-  stroke-width: 2;
-}
-
 /* 세분화 지역 (시·군) */
 .region[data-region="chuncheon"] path { fill: var(--r-chuncheon); }
 .region[data-region="bongpyeong"] path { fill: var(--r-bongpyeong); }
@@ -279,6 +288,13 @@ body {
 .region[data-region="gochang"] path { fill: var(--r-gochang); }
 .region[data-region="beolgyo"] path { fill: var(--r-beolgyo); }
 .region[data-region="mokpo"] path { fill: var(--r-mokpo); }
+.region[data-region="sokcho"] path { fill: var(--r-sokcho); }
+.region[data-region="yeongyang"] path { fill: var(--r-yeongyang); }
+.region[data-region="jeonju"] path { fill: var(--r-jeonju); }
+.region[data-region="namhae"] path { fill: var(--r-namhae); }
+.region[data-region="haenam"] path { fill: var(--r-haenam); }
+.region[data-region="gangjin"] path { fill: var(--r-gangjin); }
+.region[data-region="damyang"] path { fill: var(--r-damyang); }
 
 .region.sub-region path {
   stroke-width: 1.8;
@@ -297,10 +313,6 @@ body {
 .region:hover path {
   filter: brightness(1.08);
   stroke-width: 2;
-}
-
-.region.metro:hover path {
-  stroke-width: 2.5;
 }
 
 .region.selected path {
@@ -324,12 +336,6 @@ body {
   stroke-width: 2.5px;
   stroke-linecap: round;
   stroke-linejoin: round;
-}
-
-.labels-group text.metro-label {
-  font-size: 13px;
-  font-weight: 700;
-  stroke-width: 2px;
 }
 
 .labels-group text.sub-label {

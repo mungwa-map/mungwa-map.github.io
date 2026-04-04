@@ -880,6 +880,161 @@ const DETAIL_MAPS = {
       { name: '4·3평화공원', x: 270, y: 130 }
     ],
     workPositions: { 'lit-23': { x: 265, y: 115 }, 'lit-24': { x: 200, y: 350 } }
+  },
+
+  sokcho: {
+    viewBox: '0 0 400 500',
+    districts: [
+      { name: '속초시내', path: 'M100,140 L260,135 L270,260 L105,265Z', labelX: 182, labelY: 205 },
+      { name: '설악동', path: 'M200,20 L380,15 L385,135 L260,135Z', labelX: 310, labelY: 80 },
+      { name: '대포동', path: 'M270,260 L385,250 L380,400 L265,405Z', labelX: 328, labelY: 330 },
+      { name: '영랑동', path: 'M15,60 L200,20 L260,135 L100,140 L20,130Z', labelX: 120, labelY: 85 },
+      { name: '조양동', path: 'M20,130 L100,140 L105,265 L100,350 L15,340Z', labelX: 58, labelY: 240 }
+    ],
+    rivers: [
+      { name: '쌍천', path: 'M310,30 C290,100 270,170 260,240 C250,310 245,370 240,450', labelX: 285, labelY: 140 }
+    ],
+    mountains: [
+      { name: '설악산', x: 330, y: 55 },
+      { name: '울산바위', x: 370, y: 100 }
+    ],
+    landmarks: [
+      { name: '설악산국립공원', x: 340, y: 40 },
+      { name: '영랑호', x: 100, y: 100 },
+      { name: '속초해수욕장', x: 170, y: 170 },
+      { name: '이순원 산문의 집', x: 310, y: 110 }
+    ],
+    workPositions: { 'lit-53': { x: 320, y: 95 } }
+  },
+
+  yeongyang: {
+    viewBox: '0 0 400 500',
+    districts: [
+      { name: '영양읍', path: 'M110,150 L270,145 L280,270 L115,275Z', labelX: 192, labelY: 215 },
+      { name: '석보면', path: 'M280,270 L385,260 L380,420 L275,425Z', labelX: 332, labelY: 345 },
+      { name: '일월면', path: 'M15,110 L110,150 L115,275 L80,340 L20,320Z', labelX: 62, labelY: 230 },
+      { name: '청기면', path: 'M110,15 L300,10 L270,145 L110,150Z', labelX: 195, labelY: 85 },
+      { name: '수비면', path: 'M270,145 L385,130 L385,260 L280,270Z', labelX: 330, labelY: 200 }
+    ],
+    rivers: [
+      { name: '반변천', path: 'M180,20 C185,90 190,160 195,230 C200,300 205,370 210,460', labelX: 215, labelY: 130 }
+    ],
+    mountains: [{ name: '일월산', x: 55, y: 175 }],
+    landmarks: [
+      { name: '주실마을(조지훈생가)', x: 70, y: 270 },
+      { name: '두들마을(이문열)', x: 200, y: 195 },
+      { name: '영양문학관', x: 225, y: 230 }
+    ],
+    workPositions: { 'lit-77': { x: 205, y: 205 }, 'lit-135': { x: 75, y: 260 } }
+  },
+
+  jeonju: {
+    viewBox: '0 0 400 500',
+    districts: [
+      { name: '완산구', path: 'M110,140 L260,135 L270,260 L115,265Z', labelX: 188, labelY: 205 },
+      { name: '덕진구', path: 'M110,20 L290,15 L260,135 L110,140Z', labelX: 195, labelY: 80 },
+      { name: '삼례읍', path: 'M15,100 L110,140 L115,265 L80,330 L20,310Z', labelX: 62, labelY: 220 },
+      { name: '소양면', path: 'M260,135 L385,120 L380,300 L270,260Z', labelX: 328, labelY: 215 },
+      { name: '용진읍', path: 'M80,330 L270,310 L280,440 L75,445Z', labelX: 178, labelY: 385 }
+    ],
+    rivers: [
+      { name: '전주천', path: 'M220,10 C215,80 210,150 205,220 C200,290 198,360 195,460', labelX: 230, labelY: 120 }
+    ],
+    mountains: [{ name: '모악산', x: 350, y: 260 }],
+    landmarks: [
+      { name: '한옥마을', x: 195, y: 195 },
+      { name: '경기전', x: 180, y: 215 },
+      { name: '전주향교', x: 220, y: 230 },
+      { name: '이병기생가', x: 75, y: 260 }
+    ],
+    workPositions: { 'lit-82': { x: 190, y: 200 } }
+  },
+
+  namhae: {
+    viewBox: '0 0 400 500',
+    districts: [
+      { name: '남해읍', path: 'M120,130 L270,125 L280,250 L125,255Z', labelX: 198, labelY: 195 },
+      { name: '이동면', path: 'M15,90 L120,130 L125,255 L80,310 L20,290Z', labelX: 65, labelY: 200 },
+      { name: '상주면', path: 'M80,310 L260,305 L270,430 L75,435Z', labelX: 172, labelY: 375 },
+      { name: '미조면', path: 'M260,305 L380,300 L375,440 L270,430Z', labelX: 322, labelY: 370 },
+      { name: '설천면', path: 'M270,125 L385,115 L380,300 L280,250Z', labelX: 330, labelY: 215 }
+    ],
+    rivers: [],
+    mountains: [{ name: '금산', x: 95, y: 245 }],
+    landmarks: [
+      { name: '노도(김만중유배지)', x: 55, y: 170 },
+      { name: '남해금산', x: 100, y: 260 },
+      { name: '독일마을', x: 200, y: 345 },
+      { name: '상주해수욕장', x: 150, y: 395 }
+    ],
+    workPositions: { 'lit-94': { x: 60, y: 180 } }
+  },
+
+  haenam: {
+    viewBox: '0 0 400 500',
+    districts: [
+      { name: '해남읍', path: 'M120,130 L280,125 L290,255 L125,260Z', labelX: 202, labelY: 195 },
+      { name: '송지면', path: 'M100,330 L280,325 L290,460 L95,465Z', labelX: 190, labelY: 400 },
+      { name: '북평면', path: 'M15,90 L120,130 L125,260 L100,330 L20,310Z', labelX: 65, labelY: 210 },
+      { name: '현산면', path: 'M280,125 L385,115 L380,305 L290,255Z', labelX: 335, labelY: 215 },
+      { name: '문내면', path: 'M125,260 L290,255 L280,325 L100,330Z', labelX: 195, labelY: 295 }
+    ],
+    rivers: [
+      { name: '해남천', path: 'M210,20 C208,90 205,160 202,230 C200,300 198,370 195,460', labelX: 225, labelY: 130 }
+    ],
+    mountains: [{ name: '두륜산', x: 55, y: 145 }],
+    landmarks: [
+      { name: '땅끝마을', x: 185, y: 440 },
+      { name: '대흥사', x: 65, y: 175 },
+      { name: '보길도(윤선도)', x: 155, y: 375 },
+      { name: '고산윤선도유적지', x: 180, y: 410 }
+    ],
+    workPositions: { 'lit-86': { x: 160, y: 385 } }
+  },
+
+  gangjin: {
+    viewBox: '0 0 400 500',
+    districts: [
+      { name: '강진읍', path: 'M120,140 L270,135 L280,265 L125,270Z', labelX: 198, labelY: 210 },
+      { name: '도암면', path: 'M15,100 L120,140 L125,270 L80,330 L20,310Z', labelX: 65, labelY: 220 },
+      { name: '대구면', path: 'M270,135 L385,125 L380,300 L280,265Z', labelX: 330, labelY: 218 },
+      { name: '칠량면', path: 'M80,330 L265,320 L275,445 L75,450Z', labelX: 175, labelY: 390 },
+      { name: '성전면', path: 'M110,15 L300,10 L270,135 L120,140Z', labelX: 200, labelY: 80 }
+    ],
+    rivers: [
+      { name: '탐진강', path: 'M350,50 C320,120 290,190 260,260 C230,330 200,390 170,470', labelX: 310, labelY: 140 }
+    ],
+    mountains: [{ name: '월출산', x: 340, y: 70 }],
+    landmarks: [
+      { name: '김영랑생가', x: 190, y: 190 },
+      { name: '다산초당', x: 70, y: 260 },
+      { name: '강진만생태공원', x: 200, y: 340 },
+      { name: '영랑생가문학관', x: 215, y: 215 }
+    ],
+    workPositions: { 'lit-139': { x: 195, y: 200 } }
+  },
+
+  damyang: {
+    viewBox: '0 0 400 500',
+    districts: [
+      { name: '담양읍', path: 'M120,140 L270,135 L280,260 L125,265Z', labelX: 198, labelY: 205 },
+      { name: '남면', path: 'M120,15 L300,10 L270,135 L120,140Z', labelX: 200, labelY: 80 },
+      { name: '창평면', path: 'M270,135 L385,125 L380,295 L280,260Z', labelX: 332, labelY: 215 },
+      { name: '대덕면', path: 'M80,330 L265,320 L275,445 L75,450Z', labelX: 175, labelY: 390 },
+      { name: '가사문학면', path: 'M15,100 L120,140 L125,265 L80,330 L20,310Z', labelX: 65, labelY: 225 }
+    ],
+    rivers: [
+      { name: '영산강', path: 'M10,350 C80,340 160,330 240,325 C310,320 360,318 400,315', labelX: 200, labelY: 312 }
+    ],
+    mountains: [{ name: '추월산', x: 350, y: 170 }],
+    landmarks: [
+      { name: '식영정', x: 60, y: 200 },
+      { name: '면앙정', x: 75, y: 260 },
+      { name: '소쇄원', x: 50, y: 230 },
+      { name: '죽녹원', x: 200, y: 185 },
+      { name: '가사문학관', x: 85, y: 290 }
+    ],
+    workPositions: { 'lit-136': { x: 80, y: 255 } }
   }
 
 };

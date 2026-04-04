@@ -214,8 +214,7 @@
 
       // 라벨 — 화면 기준 고정 px
       $$('.zoom-label').forEach(function(label) {
-        var target = label.classList.contains('sub-label') ? 12
-          : label.classList.contains('metro-label') ? 13 : 16;
+        var target = label.classList.contains('sub-label') ? 12 : 16;
         label.style.fontSize = (target / rs) + 'px';
         label.style.strokeWidth = (2.5 / rs) + 'px';
       });
