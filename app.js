@@ -16,6 +16,10 @@
   const $ = (sel) => document.querySelector(sel);
   const $$ = (sel) => document.querySelectorAll(sel);
 
+  function isDesktop() {
+    return window.matchMedia('(min-width: 1024px)').matches;
+  }
+
   // ===== Region Helpers =====
   function getChildRegionIds(regionId) {
     return Object.keys(REGIONS).filter(function(id) {
@@ -38,6 +42,33 @@
     setupKeyboard();
     setupDiscovery();
     updateAllBadges();
+
+    // PC: 웰컴 상태 초기화 (글귀는 setupDiscovery에서 처리)
+
+    // 리사이즈 핸들러
+    window.matchMedia('(min-width: 1024px)').addEventListener('change', function(e) {
+      var panel = $('#storyPanel');
+      if (e.matches) {
+        // 데스크톱 진입
+        $('#overlay').classList.remove('visible');
+        document.body.classList.remove('panel-open');
+        panel.classList.remove('open');
+        if (state.selectedRegion) {
+          panel.classList.add('has-region');
+          document.body.classList.add('region-active');
+        }
+        // 글귀 동기화
+        showDiscoveryCard();
+      } else {
+        // 모바일 진입
+        panel.classList.remove('has-region');
+        document.body.classList.remove('region-active');
+        if (state.selectedRegion) {
+          panel.classList.add('open');
+        }
+      }
+    });
+
     registerSW();
   }
 
@@ -77,11 +108,48 @@
   // ===== Map =====
   function setupMap() {
     $$('.region').forEach(el => {
-      el.addEventListener('click', () => {
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
         const regionId = el.dataset.region;
         selectRegion(regionId);
       });
     });
+
+    // 바다(배경) 클릭 → 줌 복귀
+    var sea = $('.map-sea');
+    if (sea) {
+      sea.addEventListener('click', function() {
+        var svg = $('#koreaMap');
+        if (svg && svg.classList.contains('zoomed')) {
+          zoomOut();
+        }
+      });
+      sea.style.cursor = 'default';
+    }
+
+    // SVG 전체 클릭 (빈 영역) → 줌 복귀
+    var svg = $('#koreaMap');
+    if (svg) {
+      svg.addEventListener('click', function(e) {
+        // 지역이나 마커 클릭이 아닌 경우만
+        if (e.target === svg || e.target.classList.contains('map-sea')) {
+          if (svg.classList.contains('zoomed')) {
+            zoomOut();
+          }
+        }
+      });
+    }
+
+    // 상세 지도 배경 클릭 → 복귀
+    var detailMap = $('#detailMap');
+    if (detailMap) {
+      detailMap.addEventListener('click', function(e) {
+        // SVG 내부 요소(구/면, 마커 등) 클릭은 제외
+        if (e.target === detailMap || e.target.classList.contains('dm-bg')) {
+          zoomOut();
+        }
+      });
+    }
   }
 
   function selectRegion(regionId) {
@@ -102,18 +170,19 @@
       if (parentEl) parentEl.classList.add('parent-highlight');
     }
 
-    // Hide hint
-    const hint = $('#mapHint');
-    if (hint) hint.classList.add('hidden');
-
     zoomToRegion(regionId);
+
+    // PC: 패널에 바로 작품 표시
+    if (isDesktop()) {
+      showPanel(regionId);
+    }
   }
 
   // ===== Panel =====
   function setupPanel() {
     $('#panelClose').addEventListener('click', closePanel);
     $('#overlay').addEventListener('click', closePanel);
-    $('#zoomBackBtn').addEventListener('click', zoomOut);
+
     $('#storyOpenBtn').addEventListener('click', function() {
       if (state.selectedRegion) showPanel(state.selectedRegion);
     });
@@ -127,16 +196,26 @@
     $('#regionDesc').textContent = region.description;
 
     renderStories();
-    panel.classList.add('open');
-    $('#overlay').classList.add('visible');
-    document.body.classList.add('panel-open');
+
+    if (isDesktop()) {
+      panel.classList.add('has-region');
+      document.body.classList.add('region-active');
+    } else {
+      panel.classList.add('open');
+      $('#overlay').classList.add('visible');
+      document.body.classList.add('panel-open');
+    }
   }
 
   function closePanel() {
-    // 패널만 닫음 — 줌 상태 유지
-    $('#storyPanel').classList.remove('open');
-    $('#overlay').classList.remove('visible');
-    document.body.classList.remove('panel-open');
+    if (isDesktop()) {
+      $('#storyPanel').classList.remove('has-region');
+      document.body.classList.remove('region-active');
+    } else {
+      $('#storyPanel').classList.remove('open');
+      $('#overlay').classList.remove('visible');
+      document.body.classList.remove('panel-open');
+    }
   }
 
   // ===== SVG Map Zoom =====
@@ -183,7 +262,7 @@
 
     if (minX === Infinity) return;
 
-    var pad = 30;
+    var pad = isDesktop() ? 65 : 30;
     var vbW = (maxX - minX) + pad * 2;
     var vbH = (maxY - minY) + pad * 2;
     svg.setAttribute('viewBox', (minX - pad) + ' ' + (minY - pad) + ' ' + vbW + ' ' + vbH);
@@ -247,10 +326,6 @@
     }
 
     // 도(道) 레벨에서는 마커 없이 지역 선택만
-    // UI — 줌백 버튼만 (이야기 버튼은 상세 지도에서만)
-    $('#zoomBackBtn').classList.add('visible');
-    var hint = $('#mapHint');
-    if (hint) hint.classList.add('hidden');
   }
 
   function showDetailMap(regionId) {
@@ -259,6 +334,10 @@
     var mapData = (typeof DETAIL_MAPS !== 'undefined') ? DETAIL_MAPS[regionId] : null;
 
     var pinnedWorks = LITERARY_DATA.filter(function(w) { return w.region === regionId; });
+
+    // 글귀 카드 숨김
+    var dc = $('#discoveryCard');
+    if (dc) dc.classList.add('hidden');
 
     state.detailMap = null;
     var mapDiv = $('#detailMap');
@@ -435,10 +514,7 @@
 
     state.detailMap = true;
 
-    $('#zoomBackBtn').classList.add('visible');
     $('#storyOpenBtn').classList.add('visible');
-    var hint = $('#mapHint');
-    if (hint) hint.classList.add('hidden');
   }
 
   function zoomOut() {
@@ -470,7 +546,6 @@
     $$('.zoom-sibling').forEach(function(el) { el.classList.remove('zoom-sibling'); });
 
     $('#workMarkers').innerHTML = '';
-    $('#zoomBackBtn').classList.remove('visible');
     $('#storyOpenBtn').classList.remove('visible');
 
     // 글귀 카드 복원
@@ -484,10 +559,15 @@
     });
     state.selectedRegion = null;
 
-    // 패널도 닫기
-    $('#storyPanel').classList.remove('open');
-    $('#overlay').classList.remove('visible');
-    document.body.classList.remove('panel-open');
+    // 패널 상태 초기화
+    if (isDesktop()) {
+      $('#storyPanel').classList.remove('has-region');
+      document.body.classList.remove('region-active');
+    } else {
+      $('#storyPanel').classList.remove('open');
+      $('#overlay').classList.remove('visible');
+      document.body.classList.remove('panel-open');
+    }
   }
 
   function addWorkMarkers(regionId) {
@@ -1019,6 +1099,29 @@
       e.stopPropagation();
       nextDiscovery();
     });
+
+    // PC 웰컴 글귀 클릭 → 해당 작품 상세보기
+    var wd = $('#welcomeDiscovery');
+    if (wd) {
+      wd.addEventListener('click', function(e) {
+        if (e.target.closest('#welcomeQuoteNext')) return;
+        var work = LITERARY_DATA[state.discoveryOrder[state.discoveryIndex]];
+        if (!work) return;
+        selectRegion(work.region);
+        setTimeout(function() {
+          showDetail({ ...work, storyType: 'literature' });
+        }, 300);
+      });
+    }
+
+    // PC 웰컴 다음 버튼
+    var wqn = $('#welcomeQuoteNext');
+    if (wqn) {
+      wqn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        nextDiscovery();
+      });
+    }
   }
 
   function showDiscoveryCard() {
@@ -1032,6 +1135,12 @@
     var place = REGIONS[work.region] ? REGIONS[work.region].shortName : '';
     excerptEl.textContent = work.excerpt;
     metaEl.textContent = work.author + ' · \u300E' + work.title + '\u300F · ' + place;
+
+    // PC 웰컴 패널 글귀도 동기화
+    var wq = $('#welcomeQuote');
+    var wm = $('#welcomeQuoteMeta');
+    if (wq) wq.textContent = work.excerpt;
+    if (wm) wm.textContent = work.author + ' · \u300E' + work.title + '\u300F · ' + place;
   }
 
   function nextDiscovery() {

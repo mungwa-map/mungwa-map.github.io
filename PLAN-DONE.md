@@ -270,6 +270,46 @@
 
 ---
 
+## PC/모바일 UI UX 최적화 (2026-04-05 완료)
+
+### 레이아웃
+- [x] PC 2컬럼 레이아웃 — 지도 + 우측 고정 패널 (padding-right 460px 방식)
+- [x] 타이틀 화면 — 지도 + 글귀 카드만 표시, 패널은 지역 선택 시에만
+- [x] 지도 height-first (100dvh - 128px) 방식으로 제주 잘림 해결
+- [x] 모바일 map-section padding-top 64px 헤더 높이 맞춤
+
+### 버튼/내비게이션
+- [x] 전체지도 버튼 완전 제거 — index.html, style.css, app.js 모두
+- [x] 지도 외부 클릭(바다/빈 영역)으로 줌아웃 복귀
+- [x] story-open-btn opacity/visibility 패턴으로 애니메이션 개선
+
+### Discovery Card (글귀 카드)
+- [x] 원고지 격자 패턴 제거 — 카드/body/헤더/패널/모달 전체
+- [x] body: 프리미엄 dot grid (radial-gradient 28px) 교체, 다크모드 별도 적용
+- [x] PC: position fixed + 동적 너비 calc((100vw - (100dvh-128px)×0.705)/2 - 80px) — 지도 비침 없음
+- [x] PC 최대 너비 420px (기존 320px)
+- [x] rotate 제거 (기본/hover 모두)
+- [x] 모바일: 전체 너비, 3줄 표시, 0.82rem 폰트
+
+### 지역명 컴포넌트 (dm-title)
+- [x] pill → radius-sm 카드형, accent 색상, shadow-md, letter-spacing
+- [x] top: 12px → 22px (지도와 간격 확보)
+
+### 기타
+- [x] "지역을 선택해보세요" 힌트 텍스트 제거 (HTML + JS)
+- [x] mapHint 데드코드 제거
+
+### 진행 로그
+| 시간 | 작업 내용 |
+|------|----------|
+| 04-05 | PC 2컬럼 레이아웃, 타이틀 화면, 제주 잘림 수정 |
+| 04-05 | 전체지도 버튼 제거, 외부 클릭 줌아웃 |
+| 04-05 | 원고지 격자→dot grid 프리미엄 리디자인 |
+| 04-05 | Discovery Card PC 동적 너비, 모바일 3줄 개선 |
+| 04-05 | dm-title 디자인 통일, 힌트 텍스트 제거 |
+
+---
+
 ## 신규 7개 지역 SVG + CSS + 광역시 통합 (2026-04-05 완료)
 
 ### SVG (index.html)

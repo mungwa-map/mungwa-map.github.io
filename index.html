@@ -181,7 +181,7 @@
             </g>
             <!-- 목포 (전남) -->
             <g class="region sub-region" data-region="mokpo">
-              <path d="M70,477 L100,470 L113,487 L107,506 L80,510 L67,494Z"/>
+              <path d="M52,467 L82,460 L95,477 L89,496 L62,500 L49,484Z"/>
             </g>
             <!-- 속초 (강원) -->
             <g class="region sub-region" data-region="sokcho">
@@ -201,7 +201,7 @@
             </g>
             <!-- 해남 (전남) -->
             <g class="region sub-region" data-region="haenam">
-              <path d="M85,499 L115,492 L128,509 L122,528 L95,532 L82,516Z"/>
+              <path d="M95,507 L125,500 L138,517 L132,536 L105,540 L92,524Z"/>
             </g>
             <!-- 강진 (전남) -->
             <g class="region sub-region" data-region="gangjin">
@@ -249,12 +249,12 @@
             <text x="223" y="383" data-label="namwon" class="sub-label">남원</text>
             <text x="167" y="390" data-label="gochang" class="sub-label">고창</text>
             <text x="213" y="487" data-label="beolgyo" class="sub-label">벌교</text>
-            <text x="90" y="497" data-label="mokpo" class="sub-label">목포</text>
+            <text x="72" y="487" data-label="mokpo" class="sub-label">목포</text>
             <text x="433" y="142" data-label="sokcho" class="sub-label">속초</text>
             <text x="423" y="293" data-label="yeongyang" class="sub-label">영양</text>
             <text x="205" y="345" data-label="jeonju" class="sub-label">전주</text>
             <text x="298" y="521" data-label="namhae" class="sub-label">남해</text>
-            <text x="105" y="519" data-label="haenam" class="sub-label">해남</text>
+            <text x="118" y="527" data-label="haenam" class="sub-label">해남</text>
             <text x="155" y="523" data-label="gangjin" class="sub-label">강진</text>
             <text x="200" y="442" data-label="damyang" class="sub-label">담양</text>
           </g>
@@ -332,7 +332,7 @@
             <g class="count-badge" data-badge="beolgyo" transform="translate(233,494)">
               <circle r="9"/><text dy="3.5"></text>
             </g>
-            <g class="count-badge" data-badge="mokpo" transform="translate(110,504)">
+            <g class="count-badge" data-badge="mokpo" transform="translate(92,494)">
               <circle r="9"/><text dy="3.5"></text>
             </g>
             <g class="count-badge" data-badge="sokcho" transform="translate(450,149)">
@@ -347,7 +347,7 @@
             <g class="count-badge" data-badge="namhae" transform="translate(318,528)">
               <circle r="9"/><text dy="3.5"></text>
             </g>
-            <g class="count-badge" data-badge="haenam" transform="translate(125,526)">
+            <g class="count-badge" data-badge="haenam" transform="translate(138,534)">
               <circle r="9"/><text dy="3.5"></text>
             </g>
             <g class="count-badge" data-badge="gangjin" transform="translate(175,530)">
@@ -366,12 +366,9 @@
         <div id="detailMap" class="detail-map"></div>
 
         <!-- 전체 지도 복귀 버튼 -->
-        <button id="zoomBackBtn" class="zoom-back-btn" aria-label="전체 지도">&larr; 전체 지도</button>
-        <!-- 이야기 목록 버튼 -->
+<!-- 이야기 목록 버튼 -->
         <button id="storyOpenBtn" class="story-open-btn" aria-label="이야기 보기">작품 · 이야기 &rsaquo;</button>
 
-        <!-- 지도 안내 -->
-        <p class="map-hint" id="mapHint">지역을 선택해보세요</p>
 
       </div>
     </main>
@@ -383,6 +380,16 @@
         <button id="panelClose" class="icon-btn panel-close-btn" aria-label="닫기">&times;</button>
         <h2 id="regionTitle" class="region-title"></h2>
         <p id="regionDesc" class="region-desc"></p>
+      </div>
+      <!-- PC 웰컴 상태 (지역 미선택 시) — 글귀만 -->
+      <div id="panelWelcome" class="panel-welcome">
+        <div class="welcome-discovery" id="welcomeDiscovery">
+          <p class="welcome-quote" id="welcomeQuote"></p>
+          <p class="welcome-quote-meta" id="welcomeQuoteMeta"></p>
+          <button class="welcome-quote-next" id="welcomeQuoteNext" aria-label="다른 문장">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+          </button>
+        </div>
       </div>
       <div class="panel-body" id="panelBody">
         <div class="panel-section">

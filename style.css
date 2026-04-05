@@ -143,10 +143,16 @@ html {
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   background-color: var(--bg-primary);
+  background-image: radial-gradient(circle, rgba(139,105,20,0.10) 1px, transparent 1px);
+  background-size: 28px 28px;
   color: var(--text-primary);
   min-height: 100dvh;
   transition: background-color 0.4s, color 0.4s;
   overflow-x: hidden;
+}
+
+[data-theme="dark"] body {
+  background-image: radial-gradient(circle, rgba(212,168,50,0.07) 1px, transparent 1px);
 }
 
 /* ===== Header ===== */
@@ -160,7 +166,7 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 12px 20px;
-  background: var(--bg-primary);
+  background-color: var(--bg-primary);
   border-bottom: 1px solid var(--border);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -372,7 +378,7 @@ body {
 .story-panel {
   position: fixed;
   z-index: 200;
-  background: var(--bg-secondary);
+  background-color: var(--bg-secondary);
   display: flex;
   flex-direction: column;
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -385,7 +391,7 @@ body {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 75dvh;
+    height: 80dvh;
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
     transform: translateY(100%);
     box-shadow: 0 -4px 30px rgba(0,0,0,0.15);
@@ -484,6 +490,7 @@ body {
   overflow-y: auto;
   padding: 16px 20px;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 /* Panel footer */
@@ -492,6 +499,11 @@ body {
   padding-bottom: max(12px, env(safe-area-inset-bottom));
   border-top: 1px solid var(--border);
   flex-shrink: 0;
+}
+
+/* Panel welcome state (PC) */
+.panel-welcome {
+  display: none;
 }
 
 .write-btn {
@@ -522,6 +534,10 @@ body {
 }
 
 /* 줌 시 타겟 외 지역 처리 */
+#koreaMap.zoomed .map-sea {
+  cursor: pointer;
+}
+
 #koreaMap.zoomed .region:not(.zoom-target):not(.zoom-sibling) {
   opacity: 0.07;
   pointer-events: none;
@@ -568,7 +584,14 @@ body {
 
 /* 줌 시 글귀 카드 숨김 */
 .discovery-card.hidden {
-  display: none;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.discovery-card:not(.hidden) {
+  opacity: 1;
+  transition: opacity 0.3s;
 }
 
 /* 위치 동그라미 마커 */
@@ -646,62 +669,38 @@ body {
   stroke: var(--bg-secondary);
 }
 
-/* 줌 복귀 버튼 */
-.zoom-back-btn {
-  display: none;
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  padding: 5px 12px;
-  border: 1px solid var(--border);
-  border-radius: 100px;
-  background: var(--bg-secondary);
-  color: var(--text-secondary);
-  font-family: 'Noto Serif KR', serif;
-  font-size: 0.72rem;
-  font-weight: 600;
-  cursor: pointer;
-  z-index: 5;
-  box-shadow: var(--shadow-sm);
-  transition: all 0.2s;
-}
-
-.zoom-back-btn.visible {
-  display: block;
-}
-
-.zoom-back-btn:hover {
-  background: var(--accent-bg);
-  border-color: var(--accent);
-  color: var(--accent);
-}
 
 /* 이야기 보기 버튼 */
 .story-open-btn {
-  display: none;
   position: absolute;
   top: 8px;
   right: 8px;
-  padding: 5px 14px;
-  border: none;
+  padding: 6px 14px;
+  border: 1px solid var(--accent);
   border-radius: 100px;
-  background: var(--accent);
-  color: #FFF;
+  background: var(--accent-bg);
+  color: var(--accent);
   font-family: 'Noto Serif KR', serif;
-  font-size: 0.72rem;
+  font-size: 0.75rem;
   font-weight: 700;
   cursor: pointer;
   z-index: 5;
   box-shadow: var(--shadow-sm);
-  transition: all 0.2s;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.25s, visibility 0.25s, background 0.2s, color 0.2s;
 }
 
 .story-open-btn.visible {
-  display: block;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .story-open-btn:hover {
-  background: var(--accent-hover);
+  background: var(--accent);
+  color: #FFF;
 }
 
 /* ===== 시·군 상세 SVG 지도 ===== */
@@ -729,6 +728,7 @@ body {
 
 .dm-bg {
   fill: var(--sea);
+  cursor: pointer;
 }
 
 /* 구/면 경계 */
@@ -770,7 +770,7 @@ body {
   font-family: 'Noto Serif KR', serif;
   font-size: 7px;
   fill: #7BA1B5;
-  font-style: italic;
+  font-style: normal;
   pointer-events: none;
   paint-order: stroke fill;
   stroke: var(--bg-primary);
@@ -821,7 +821,7 @@ body {
 
 .dm-work-dot {
   fill: var(--accent);
-  stroke: #fff;
+  stroke: var(--bg-card);
   stroke-width: 2;
   transition: r 0.15s;
 }
@@ -864,26 +864,28 @@ body {
 /* 지역명 */
 .dm-title {
   position: absolute;
-  top: 10px;
+  top: 22px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
   font-family: 'Noto Serif KR', serif;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--accent);
   background: var(--bg-card);
-  padding: 4px 14px;
-  border-radius: 100px;
+  padding: 5px 18px;
+  border-radius: var(--radius-sm);
   border: 1px solid var(--border);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
   pointer-events: none;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
 }
 
 /* 도 전역 작품 리스트 */
 .dm-area-list {
   position: absolute;
-  bottom: 8px;
+  bottom: max(8px, env(safe-area-inset-bottom));
   left: 8px;
   right: 8px;
   z-index: 10;
@@ -980,7 +982,7 @@ body {
 
 [data-theme="dark"] .badge-user {
   background: #1E2E22;
-  color: #7DB88D;
+  color: #95CCA5;
 }
 
 .card-title {
@@ -1061,7 +1063,7 @@ body {
 
 .modal-content {
   position: relative;
-  background: var(--bg-secondary);
+  background-color: var(--bg-secondary);
   border-radius: var(--radius-lg);
   width: 100%;
   max-width: 480px;
@@ -1401,12 +1403,12 @@ body {
 }
 
 .like-btn:hover {
-  color: #D44;
-  background: rgba(221,68,68,0.08);
+  color: #C45A3C;
+  background: rgba(196,90,60,0.08);
 }
 
 .like-btn.liked {
-  color: #D44;
+  color: #C45A3C;
 }
 
 /* Sort toggle */
@@ -1449,10 +1451,10 @@ body {
   width: 100%;
   margin-top: 24px;
   padding: 11px;
-  border: 1.5px solid #D44;
+  border: 1.5px solid #C45A3C;
   border-radius: var(--radius-sm);
   background: transparent;
-  color: #D44;
+  color: #C45A3C;
   font-size: 0.88rem;
   font-weight: 600;
   cursor: pointer;
@@ -1549,7 +1551,7 @@ body {
 .discovery-card {
   display: flex;
   align-items: stretch;
-  background: #FAF8F4;
+  background-color: #FAF8F4;
   border: none;
   border-radius: var(--radius-sm);
   margin-bottom: 14px;
@@ -1639,7 +1641,7 @@ body {
 }
 
 [data-theme="dark"] .discovery-card {
-  background: #242018;
+  background-color: #242018;
   box-shadow:
     0 0 0 1px rgba(255,255,255,0.04),
     0 1px 3px rgba(0,0,0,0.12),
@@ -1670,24 +1672,7 @@ body {
   50% { filter: brightness(1.25); }
 }
 
-@media (max-width: 768px) {
-  .discovery-card-body {
-    padding: 12px 10px;
-  }
-
-  .discovery-excerpt {
-    font-size: 0.85rem;
-    -webkit-line-clamp: 2;
-  }
-
-  .discovery-meta {
-    font-size: 0.72rem;
-  }
-
-  .discovery-next {
-    width: 38px;
-  }
-}
+/* discovery card 모바일 → 하단 통합 블록에서 관리 */
 
 /* ===== Scrollbar ===== */
 .panel-body::-webkit-scrollbar {
@@ -1703,21 +1688,20 @@ body {
   border-radius: 3px;
 }
 
-/* ===== Desktop layout ===== */
-@media (min-width: 769px) {
+/* ===== Tablet layout (769px ~ 1023px) ===== */
+@media (min-width: 769px) and (max-width: 1023px) {
   .map-section {
     transition: padding-right 0.35s;
   }
 
   body.panel-open .map-section {
-    padding-right: 440px;
+    padding-right: 460px;
   }
 
   .map-wrapper {
     max-width: calc((100dvh - 100px) * 0.705);
   }
 
-  /* 상세 지도 — 상단 컨트롤 아래로 배치 */
   .detail-map.visible {
     position: fixed;
     top: 68px;
@@ -1740,30 +1724,651 @@ body {
   }
 
   body.panel-open .detail-map.visible {
-    right: 440px;
+    right: 460px;
+  }
+
+  /* 버튼: 상세 지도 위에서도 접근 가능하도록 */
+  .story-open-btn.visible {
+    position: fixed;
+    top: 78px;
+    z-index: 10;
+  }
+  .story-open-btn.visible { right: 16px; }
+
+  /* 오버레이: 태블릿에서도 숨김 */
+  .overlay {
+    display: none !important;
   }
 }
 
-@media (max-width: 768px) {
+/* ===== Desktop layout (1024px+) ===== */
+@media (min-width: 1024px) {
+
+  /* --- 기본: 지도 전체 화면 / 지역 선택 시 패널 등장 --- */
+  .map-section {
+    padding-top: 68px;
+    padding-right: 0;
+    height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: visible;
+    transition: padding-right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+  }
+
+  body.region-active .map-section {
+    padding-right: 460px;
+  }
+
+  .map-wrapper {
+    max-width: none;
+    width: 100%;
+    height: calc(100dvh - 68px);
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+  }
+
+  #koreaMap {
+    width: auto;
+    height: calc(100dvh - 128px);
+    max-width: 100%;
+    flex-shrink: 0;
+  }
+
+  /* Discovery card: 지도 오른쪽 쪽지 — 지도와 겹치지 않게 동적 너비 */
+  .discovery-card {
+    position: fixed;
+    top: 50%;
+    right: 32px;
+    left: auto;
+    bottom: auto;
+    transform: translateY(-50%);
+    /* 오른쪽 여백 - 지도 너비 - 버퍼 80px 로 최대 너비 계산 */
+    width: min(420px, max(200px, calc((100vw - (100dvh - 128px) * 0.705) / 2 - 80px)));
+    height: auto;
+    margin: 0;
+    z-index: 3;
+    border-radius: 3px;
+    box-shadow:
+      0 2px 4px rgba(44,24,16,0.06),
+      0 8px 24px rgba(44,24,16,0.10),
+      4px 4px 0 -1px var(--bg-primary),
+      5px 5px 0 0 var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .discovery-card::before {
+    top: 20px;
+    left: 16px;
+    height: calc(100% - 40px);
+    width: 2px;
+    background: linear-gradient(180deg, rgba(139,105,20,0.25), rgba(139,105,20,0.06));
+  }
+
+  .discovery-card:hover {
+    transform: translateY(-50%);
+  }
+
+  .discovery-card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 24px 22px 20px 32px;
+    overflow: hidden;
+  }
+
+  .discovery-excerpt {
+    font-size: 1.02rem;
+    line-height: 2;
+    -webkit-line-clamp: 4;
+    flex-shrink: 1;
+    min-height: 0;
+  }
+
+  .discovery-meta {
+    flex-shrink: 0;
+    margin-top: 14px;
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+  }
+
+  .discovery-next {
+    opacity: 0.2;
+  }
+
+  /* 힌트: PC에서는 패널 웰컴이 대신함 */
+  .map-hint {
+    display: none;
+  }
+
+  /* --- Header --- */
   .app-header {
-    padding: 10px 16px;
+    padding: 14px 28px;
   }
 
   .logo {
-    font-size: 1.15rem;
+    font-size: 1.45rem;
+  }
+
+  .tagline {
+    font-size: 0.78rem;
+    margin-top: 2px;
+  }
+
+  /* --- Story panel: 기본 숨김, 지역 선택 시 슬라이드 --- */
+  .story-panel {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 460px;
+    transform: translateX(100%);
+    border-left: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+    z-index: 50;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .story-panel.has-region {
+    transform: translateX(0);
+  }
+
+  .panel-drag-handle {
+    display: none;
+  }
+
+  .panel-close-btn {
+    display: none;
+  }
+
+  .overlay {
+    display: none !important;
+  }
+
+  /* --- Panel welcome state: 패널 숨김 시 불필요 --- */
+  .panel-welcome {
+    display: none;
+  }
+
+  .welcome-discovery {
+    padding: 18px 20px 16px 28px;
+    position: relative;
+    text-align: left;
+    max-width: 340px;
+    width: 100%;
+    cursor: pointer;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    box-shadow:
+      0 0 0 1px rgba(44,24,16,0.03),
+      0 1px 3px rgba(44,24,16,0.04),
+      0 4px 14px rgba(44,24,16,0.05);
+    transition: box-shadow 0.3s, transform 0.25s;
+  }
+
+  .welcome-discovery::before {
+    content: '';
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    width: 2px;
+    height: calc(100% - 28px);
+    background: linear-gradient(180deg, rgba(139,105,20,0.2), rgba(139,105,20,0.04));
+    border-radius: 1px;
+  }
+
+  .welcome-discovery:hover {
+    box-shadow:
+      0 0 0 1px rgba(44,24,16,0.05),
+      0 2px 6px rgba(44,24,16,0.06),
+      0 6px 20px rgba(44,24,16,0.08);
+    transform: translateY(-1px);
+  }
+
+  [data-theme="dark"] .welcome-discovery {
+    background: #242018;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.04),
+      0 1px 3px rgba(0,0,0,0.12),
+      0 4px 14px rgba(0,0,0,0.15);
+  }
+
+  [data-theme="dark"] .welcome-discovery::before {
+    background: linear-gradient(180deg, rgba(212,168,50,0.2), rgba(212,168,50,0.04));
+  }
+
+  .welcome-quote {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 0.9rem;
+    line-height: 1.85;
+    color: var(--text-secondary);
+    white-space: pre-line;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .welcome-quote-meta {
+    font-size: 0.72rem;
+    color: var(--text-tertiary);
+    margin-top: 10px;
+    letter-spacing: 0.04em;
+  }
+
+  .welcome-quote-next {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    border: none;
+    background: transparent;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    padding: 4px;
+    opacity: 0.25;
+    transition: opacity 0.25s, color 0.25s;
+  }
+
+  .welcome-quote-next:hover {
+    opacity: 0.8;
+    color: var(--accent);
+  }
+
+  .welcome-hint {
+    font-size: 0.78rem;
+    color: var(--text-tertiary);
+    margin-top: 20px;
+    letter-spacing: 0.03em;
+  }
+
+  /* When region selected: hide welcome, show content */
+  .story-panel.has-region .panel-welcome {
+    display: none;
+  }
+
+  .story-panel:not(.has-region) .panel-header {
+    display: none;
+  }
+
+  .story-panel:not(.has-region) .panel-body {
+    display: none;
+  }
+
+  .story-panel:not(.has-region) .panel-footer {
+    display: none;
+  }
+
+  /* --- Panel content sizing --- */
+  .panel-header {
+    padding: 20px 24px 0;
+  }
+
+  .region-title {
+    font-size: 1.45rem;
+  }
+
+  .region-desc {
+    font-size: 0.88rem;
+    margin-top: 8px;
+    line-height: 1.6;
+  }
+
+  .panel-body {
+    padding: 20px 24px;
+  }
+
+  .section-header {
+    font-size: 0.95rem;
+  }
+
+  .panel-footer {
+    padding: 16px 24px;
+  }
+
+  .write-btn {
+    padding: 14px;
+    font-size: 1rem;
+    border-radius: var(--radius-md);
+  }
+
+  /* --- Story cards --- */
+  .story-card {
+    padding: 18px;
+    margin-bottom: 14px;
+  }
+
+  .card-title {
+    font-size: 1.1rem;
+  }
+
+  .card-meta {
+    font-size: 0.85rem;
+  }
+
+  .card-excerpt {
+    font-size: 0.88rem;
+    margin-top: 12px;
+    -webkit-line-clamp: 3;
+  }
+
+  /* --- Story open button: hidden on PC --- */
+  .story-open-btn {
+    display: none !important;
+  }
+
+  /* --- Discovery card: 상단 오버라이드 (position은 위에서 absolute) --- */
+  .discovery-card {
+    margin-bottom: 0;
+  }
+
+  .discovery-card-body {
+    padding: 22px 20px 20px 30px;
+  }
+
+  .discovery-excerpt {
+    font-size: 1rem;
+    -webkit-line-clamp: 3;
+  }
+
+  .discovery-meta {
+    font-size: 0.76rem;
+    margin-top: 14px;
+  }
+
+  /* --- Detail map: map-section 기준 고정 --- */
+  .detail-map.visible {
+    position: fixed;
+    top: 68px;
+    left: 0;
+    right: 460px;
+    bottom: 0;
+    border-radius: 0;
+    z-index: 2;
+    padding: 48px 24px 24px;
+  }
+
+  body.region-active .detail-map.visible {
+    right: 460px;
+  }
+
+  .dm-svg {
+    max-width: 700px;
+    max-height: 100%;
+  }
+
+  .dm-area-list {
+    max-width: 400px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+  }
+
+  /* --- Modals --- */
+  .modal-content {
+    max-width: 560px;
+  }
+
+  .detail-modal {
+    padding: 32px;
+  }
+
+  .detail-modal h3 {
+    font-size: 1.45rem;
+  }
+
+  .detail-excerpt {
+    font-size: 1.05rem;
+    padding: 24px;
+  }
+
+  .detail-desc {
+    font-size: 0.95rem;
+  }
+
+  .write-modal {
+    max-width: 520px;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 12px 16px;
+    font-size: 0.95rem;
+  }
+
+  /* --- Map region hover --- */
+  .region:hover path {
+    filter: brightness(1.1);
+    stroke-width: 2.2;
+  }
+
+  .region.sub-region:hover path {
+    stroke-width: 2.5;
+  }
+
+  /* --- Map hint --- */
+  .map-hint {
+    font-size: 0.9rem;
+  }
+}
+
+/* ===== Mobile optimization (768px 이하) ===== */
+@media (max-width: 768px) {
+
+  /* --- 헤더 --- */
+  .app-header {
+    padding: 8px 14px;
+  }
+
+  .logo {
+    font-size: 1.1rem;
+  }
+
+  .tagline {
+    font-size: 0.65rem;
+  }
+
+  .icon-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+
+  /* --- 지도 영역: 최대한 공간 확보 (헤더 실제 높이 64px 맞춤) --- */
+  .map-section {
+    padding-top: 64px;
   }
 
   .map-wrapper {
     padding: 4px;
-    max-width: min(100%, calc((100dvh - 140px) * 0.705));
+    max-width: min(100%, calc((100dvh - 195px) * 0.705));
+  }
+
+  /* --- 버튼: 터치 타겟 44px 확보 --- */
+  .story-open-btn {
+    min-height: 44px;
+    padding: 10px 18px;
+    font-size: 0.75rem;
+  }
+
+  /* --- Discovery card: 3줄, 전체 너비 --- */
+  .discovery-card {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 0 12px;
+    border-radius: 8px;
+  }
+
+  .discovery-card::before {
+    top: 12px;
+    left: 12px;
+    height: calc(100% - 24px);
+  }
+
+  .discovery-card-body {
+    padding: 14px 12px 14px 26px;
+  }
+
+  .discovery-excerpt {
+    font-size: 0.82rem;
+    line-height: 1.85;
+    -webkit-line-clamp: 3;
+  }
+
+  .discovery-meta {
+    font-size: 0.7rem;
+    margin-top: 8px;
+  }
+
+  .discovery-next {
+    min-width: 44px;
+  }
+
+  /* --- 힌트 --- */
+  .map-hint {
+    font-size: 0.78rem;
+    margin-top: 4px;
+  }
+
+  /* --- 스토리 패널 --- */
+  .story-panel {
+    height: 80dvh;
+  }
+
+  .panel-header {
+    padding: 10px 16px 0;
   }
 
   .region-title {
-    font-size: 1.2rem;
+    font-size: 1.15rem;
+  }
+
+  .region-desc {
+    font-size: 0.78rem;
+  }
+
+  .panel-body {
+    padding: 12px 16px;
+  }
+
+  .section-header {
+    font-size: 0.85rem;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+  }
+
+  .panel-footer {
+    padding: 10px 16px;
+    padding-bottom: max(10px, env(safe-area-inset-bottom));
+  }
+
+  .write-btn {
+    padding: 12px;
+    font-size: 0.9rem;
+  }
+
+  /* --- 스토리 카드 --- */
+  .story-card {
+    padding: 14px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+  }
+
+  .card-title {
+    font-size: 0.98rem;
+  }
+
+  .card-meta {
+    font-size: 0.78rem;
+  }
+
+  .card-excerpt {
+    font-size: 0.82rem;
+    margin-top: 8px;
+    -webkit-line-clamp: 2;
+  }
+
+  .badge {
+    font-size: 0.65rem;
+    padding: 2px 7px;
+  }
+
+  /* --- 모달 --- */
+  .modal {
+    padding: 12px;
+  }
+
+  .modal-content {
+    max-width: 100%;
+    max-height: 90dvh;
+    border-radius: 14px;
   }
 
   .detail-modal {
-    padding: 20px;
+    padding: 18px;
+  }
+
+  .detail-modal h3 {
+    font-size: 1.2rem;
+  }
+
+  .detail-excerpt {
+    font-size: 0.92rem;
+    padding: 16px;
+    margin-top: 14px;
+  }
+
+  .detail-desc {
+    font-size: 0.85rem;
+    margin-top: 12px;
+  }
+
+  .write-comment-btn {
+    padding: 12px;
+    font-size: 0.85rem;
+  }
+
+  /* --- 글쓰기 모달 --- */
+  .form-group {
+    margin-top: 12px;
+    padding: 0 16px;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 10px 12px;
+    font-size: 0.88rem;
+  }
+
+  .form-actions {
+    padding: 16px 16px 0;
+  }
+
+  .btn {
+    padding: 11px;
+    font-size: 0.88rem;
+  }
+
+  /* --- 상세 지도 --- */
+  .detail-map.visible {
+    border-radius: 0;
+  }
+
+  .dm-title {
+    font-size: 0.8rem;
+    padding: 4px 16px;
+    top: 22px;
+  }
+
+  /* 패널 높이 — 상단 dead code 제거됨, 여기서 관리 */
+  .story-panel {
+    height: 80dvh;
   }
 }
 
