@@ -7,7 +7,7 @@
     userStories: [],
     likes: {},       // { storyId: true } — 내가 공감한 글
     userSort: 'latest', // 'latest' | 'likes'
-    theme: 'light',
+    // theme removed
     discoveryIndex: -1,
     detailMap: null   // Leaflet 인스턴스 (시·군 상세 타일 지도)
   };
@@ -34,7 +34,6 @@
   // ===== Initialize =====
   function init() {
     loadState();
-    setupTheme();
     setupMap();
     setupPanel();
     setupWriteForm();
@@ -81,30 +80,12 @@
     try {
       state.likes = JSON.parse(localStorage.getItem('literary-map-likes') || '{}');
     } catch { state.likes = {}; }
-    state.theme = localStorage.getItem('literary-map-theme') ||
-      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
   }
 
   function saveStories() {
     localStorage.setItem('literary-map-stories', JSON.stringify(state.userStories));
   }
 
-  // ===== Theme =====
-  function setupTheme() {
-    applyTheme();
-    $('#themeToggle').addEventListener('click', toggleTheme);
-  }
-
-  function applyTheme() {
-    document.documentElement.setAttribute('data-theme', state.theme);
-    $('#themeToggle').textContent = state.theme === 'dark' ? '\u2600\uFE0F' : '\uD83C\uDF19';
-  }
-
-  function toggleTheme() {
-    state.theme = state.theme === 'dark' ? 'light' : 'dark';
-    localStorage.setItem('literary-map-theme', state.theme);
-    applyTheme();
-  }
 
   // ===== Map =====
   function setupMap() {

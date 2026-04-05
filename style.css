@@ -65,69 +65,6 @@
   --r-damyang: #A8C8A0;
 }
 
-[data-theme="dark"] {
-  --bg-primary: #1A1612;
-  --bg-secondary: #252019;
-  --bg-card: #2D2720;
-  --text-primary: #E8DFD0;
-  --text-secondary: #A89B8F;
-  --text-tertiary: #7B6F63;
-  --accent: #D4A832;
-  --accent-hover: #E0BA45;
-  --accent-bg: #332D1F;
-  --border: #3D362D;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
-  --shadow-lg: 0 8px 30px rgba(0,0,0,0.4);
-  --sea: #141C22;
-  --region-stroke: #5D5449;
-
-  /* 도(道) */
-  --r-gyeonggi: #5C4E3A;
-  --r-gangwon: #3E4D38;
-  --r-chungbuk: #524A3A;
-  --r-chungnam: #3E4D3C;
-  --r-gyeongbuk: #524538;
-  --r-jeonbuk: #3C4538;
-  --r-jeonnam: #4A453A;
-  --r-gyeongnam: #3E3C4A;
-  --r-jeju: #384A48;
-
-  /* 광역시·특별시 */
-  --r-seoul: #6B5A32;
-  --r-incheon: #4A4638;
-  --r-sejong: #4D5038;
-  --r-daejeon: #3A4D34;
-  --r-daegu: #5E4C30;
-  --r-gwangju: #384530;
-  --r-ulsan: #4A4252;
-  --r-busan: #344050;
-
-  /* 세분화 지역 (시·군) */
-  --r-chuncheon: #354D30;
-  --r-bongpyeong: #3C4832;
-  --r-gyeongju: #4D4230;
-  --r-gunsan: #354530;
-  --r-hadong: #38354A;
-  --r-tongyeong: #343A4A;
-  --r-gangneung: #2E4840;
-  --r-yangpyeong: #4A4538;
-  --r-okcheon: #454030;
-  --r-buyeo: #304538;
-  --r-andong: #483E35;
-  --r-namwon: #3A4232;
-  --r-gochang: #344030;
-  --r-beolgyo: #383842;
-  --r-mokpo: #424038;
-  --r-sokcho: #2E4845;
-  --r-yeongyang: #453E35;
-  --r-jeonju: #484530;
-  --r-namhae: #303A48;
-  --r-haenam: #354535;
-  --r-gangjin: #3A4238;
-  --r-damyang: #304830;
-}
-
 /* ===== Reset & Base ===== */
 *, *::before, *::after {
   margin: 0;
@@ -149,10 +86,6 @@ body {
   min-height: 100dvh;
   transition: background-color 0.4s, color 0.4s;
   overflow-x: hidden;
-}
-
-[data-theme="dark"] body {
-  background-image: radial-gradient(circle, rgba(212,168,50,0.07) 1px, transparent 1px);
 }
 
 /* ===== Header ===== */
@@ -628,10 +561,6 @@ body {
   100% { r: 12; opacity: 0; }
 }
 
-[data-theme="dark"] .loc-circle {
-  stroke: var(--bg-secondary);
-}
-
 /* 작품 마커 */
 .work-marker {
   cursor: pointer;
@@ -660,15 +589,6 @@ body {
   fill: var(--accent-hover);
   r: 5.5;
 }
-
-[data-theme="dark"] .work-marker .marker-dot {
-  stroke: var(--bg-primary);
-}
-
-[data-theme="dark"] .work-marker .marker-label {
-  stroke: var(--bg-secondary);
-}
-
 
 /* 이야기 보기 버튼 */
 .story-open-btn {
@@ -853,14 +773,6 @@ body {
   stroke-linejoin: round;
 }
 
-/* 다크 모드 */
-[data-theme="dark"] .dm-bg { fill: var(--sea); }
-[data-theme="dark"] .dm-district { fill: var(--bg-card); stroke: var(--region-stroke); }
-[data-theme="dark"] .dm-mountain polygon { fill: #3E5A3C; stroke: #4D6E4B; }
-[data-theme="dark"] .dm-mountain text { fill: #6B9068; }
-[data-theme="dark"] .dm-river { stroke: var(--sea); }
-[data-theme="dark"] .dm-river-label { fill: #4A7A8F; }
-
 /* 지역명 */
 .dm-title {
   position: absolute;
@@ -974,15 +886,6 @@ body {
   background: #E8E0D4;
   color: var(--text-secondary);
   font-size: 0.65rem;
-}
-
-[data-theme="dark"] .badge-subregion {
-  background: #3D362D;
-}
-
-[data-theme="dark"] .badge-user {
-  background: #1E2E22;
-  color: #95CCA5;
 }
 
 .card-title {
@@ -1640,18 +1543,6 @@ body {
   opacity: 0.8;
 }
 
-[data-theme="dark"] .discovery-card {
-  background-color: #242018;
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.04),
-    0 1px 3px rgba(0,0,0,0.12),
-    0 6px 20px rgba(0,0,0,0.15);
-}
-
-[data-theme="dark"] .discovery-card::before {
-  background: linear-gradient(180deg, rgba(212,168,50,0.2), rgba(212,168,50,0.04));
-}
-
 .discovery-next svg {
   transition: transform 0.4s;
 }
@@ -1930,19 +1821,7 @@ body {
     transform: translateY(-1px);
   }
 
-  [data-theme="dark"] .welcome-discovery {
-    background: #242018;
-    box-shadow:
-      0 0 0 1px rgba(255,255,255,0.04),
-      0 1px 3px rgba(0,0,0,0.12),
-      0 4px 14px rgba(0,0,0,0.15);
-  }
-
-  [data-theme="dark"] .welcome-discovery::before {
-    background: linear-gradient(180deg, rgba(212,168,50,0.2), rgba(212,168,50,0.04));
-  }
-
-  .welcome-quote {
+      .welcome-quote {
     font-family: 'Noto Serif KR', serif;
     font-size: 0.9rem;
     line-height: 1.85;
