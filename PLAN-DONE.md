@@ -2,6 +2,18 @@
 
 ---
 
+## 배포 (2026-04-05 완료)
+
+- [x] GitHub 조직 레포 생성 (mungwa-map/mungwa-map.github.io)
+- [x] GitHub Pages 배포 (https://mungwa-map.github.io)
+- [x] 도메인 URL 교체 (index.html, robots.txt, sitemap.xml)
+- [x] 404.html SPA fallback 추가
+- [x] sitemap.xml 190개 URL 확장 (홈 1 + 지역 39 + 작품 150)
+- [x] 구글 서치콘솔 소유권 인증 태그 추가
+- [x] 앱 이름 리브랜딩: 문학 지도 → 문과 지도
+
+---
+
 ## SEO 최적화 + URL 라우팅 (2026-04-05 완료)
 
 - [x] `index.html` — `<title>`, `<meta description>`, `<meta keywords>` 정비
