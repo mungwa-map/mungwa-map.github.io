@@ -70,6 +70,7 @@
     });
 
     registerSW();
+    setupRouter();
   }
 
   // ===== State Persistence =====
@@ -176,6 +177,9 @@
     if (isDesktop()) {
       showPanel(regionId);
     }
+
+    setMetaForRegion(regionId);
+    routerPush('/region/' + regionId);
   }
 
   // ===== Panel =====
@@ -220,6 +224,94 @@
 
   // ===== SVG Map Zoom =====
   var ORIGINAL_VIEWBOX = '0 0 550 780';
+
+  // ===== Router =====
+  var _routing = false; // popstate 처리 중 pushState 재진입 방지
+
+  function resolvePath(path) {
+    if (!path || path === '/' || path === '/index.html') return { type: 'home' };
+    var rm = path.match(/^\/region\/([^/]+)$/);
+    if (rm) return { type: 'region', id: rm[1] };
+    var wm = path.match(/^\/work\/([^/]+)$/);
+    if (wm) return { type: 'work', id: wm[1] }; // slug 또는 id 모두 허용
+    return { type: 'home' };
+  }
+
+  function routerPush(path) {
+    if (_routing) return;
+    history.pushState({}, '', path);
+  }
+
+  function applyRoute(route) {
+    if (route.type === 'home') {
+      if ($('#detailModal.open')) closeModal('detailModal');
+      if ($('#writeModal.open')) closeModal('writeModal');
+      if (state.selectedRegion) zoomOut();
+    } else if (route.type === 'region') {
+      if (!REGIONS[route.id]) return;
+      if ($('#detailModal.open')) closeModal('detailModal');
+      if (state.selectedRegion !== route.id) selectRegion(route.id);
+    } else if (route.type === 'work') {
+      var work = LITERARY_DATA.find(function(w) { return w.slug === route.id || w.id === route.id; });
+      if (!work) return;
+      if (!state.selectedRegion) selectRegion(work.region);
+      showDetail(Object.assign({}, work, { storyType: 'literature' }));
+    }
+  }
+
+  // ===== SEO 동적 메타 =====
+  var _defaultTitle = document.title;
+  var _defaultDesc = (document.querySelector('meta[name="description"]') || {}).content || '';
+
+  function setMeta(title, description) {
+    document.title = title;
+    var ogTitle = document.querySelector('meta[property="og:title"]');
+    var ogDesc = document.querySelector('meta[property="og:description"]');
+    var metaDesc = document.querySelector('meta[name="description"]');
+    var twTitle = document.querySelector('meta[name="twitter:title"]');
+    var twDesc = document.querySelector('meta[name="twitter:description"]');
+    if (ogTitle) ogTitle.setAttribute('content', title);
+    if (ogDesc) ogDesc.setAttribute('content', description);
+    if (metaDesc) metaDesc.setAttribute('content', description);
+    if (twTitle) twTitle.setAttribute('content', title);
+    if (twDesc) twDesc.setAttribute('content', description);
+  }
+
+  function setMetaForRegion(regionId) {
+    var region = REGIONS[regionId];
+    if (!region) return;
+    var allIds = getRegionAndChildIds(regionId);
+    var count = LITERARY_DATA.filter(function(w) { return allIds.indexOf(w.region) !== -1; }).length;
+    var title = region.name + ' — 문학 지도';
+    var desc = region.description + ' 문학작품 ' + count + '편의 배경 장소를 탐험하세요.';
+    setMeta(title, desc);
+  }
+
+  function setMetaForWork(work) {
+    var regionName = REGIONS[work.region] ? REGIONS[work.region].shortName : '';
+    var title = '『' + work.title + '』 ' + work.author + ' — 문학 지도';
+    var desc = work.description.slice(0, 120) + (work.description.length > 120 ? '…' : '');
+    setMeta(title, desc);
+  }
+
+  function resetMeta() {
+    setMeta(_defaultTitle, _defaultDesc);
+  }
+
+  function setupRouter() {
+    window.addEventListener('popstate', function() {
+      _routing = true;
+      applyRoute(resolvePath(window.location.pathname));
+      _routing = false;
+    });
+    // 초기 URL 적용 (직접 접속 or 새로고침)
+    var initial = resolvePath(window.location.pathname);
+    if (initial.type !== 'home') {
+      _routing = true;
+      applyRoute(initial);
+      _routing = false;
+    }
+  }
 
   function zoomToRegion(regionId) {
     var region = REGIONS[regionId];
@@ -568,6 +660,9 @@
       $('#overlay').classList.remove('visible');
       document.body.classList.remove('panel-open');
     }
+
+    resetMeta();
+    routerPush('/');
   }
 
   function addWorkMarkers(regionId) {
@@ -882,6 +977,10 @@
       });
     }
 
+    if (story.storyType === 'literature' && (story.slug || story.id)) {
+      setMetaForWork(story);
+      routerPush('/work/' + (story.slug || story.id));
+    }
     openModal('detailModal');
   }
 
@@ -976,6 +1075,15 @@
 
   function closeModal(id) {
     $('#' + id).classList.remove('open');
+    if (id === 'detailModal') {
+      if (state.selectedRegion) {
+        setMetaForRegion(state.selectedRegion);
+        routerPush('/region/' + state.selectedRegion);
+      } else {
+        resetMeta();
+        routerPush('/');
+      }
+    }
   }
 
   // ===== Keyboard =====
