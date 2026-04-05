@@ -6,7 +6,28 @@
   <meta name="theme-color" content="#8B6914">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
   <title>문학 지도 - 이야기가 머무는 곳</title>
+  <meta name="description" content="한국 문학 작품의 배경이 된 장소를 지도에서 탐험하세요. 150편 이상의 시·소설·수필, 39개 지역을 아우르는 문학 여행 안내서.">
+  <meta name="keywords" content="한국 문학 지도, 문학 여행, 소설 배경 장소, 시 배경, 문학관, 한국 문학, 작품 배경, 문학 탐방">
+  <meta name="author" content="문학 지도">
+  <link rel="canonical" href="https://literary-map.vercel.app/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://literary-map.vercel.app/">
+  <meta property="og:title" content="문학 지도 - 이야기가 머무는 곳">
+  <meta property="og:description" content="한국 문학 작품의 배경이 된 장소를 지도에서 탐험하세요. 150편 이상의 시·소설·수필, 39개 지역을 아우르는 문학 여행 안내서.">
+  <meta property="og:image" content="https://literary-map.vercel.app/og-image.png">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:site_name" content="문학 지도">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="문학 지도 - 이야기가 머무는 곳">
+  <meta name="twitter:description" content="한국 문학 작품의 배경이 된 장소를 지도에서 탐험하세요. 150편 이상의 시·소설·수필, 39개 지역을 아우르는 문학 여행 안내서.">
+  <meta name="twitter:image" content="https://literary-map.vercel.app/og-image.png">
+
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icon.svg">
@@ -467,5 +488,40 @@
   <script src="data.js"></script>
   <script src="detail-maps.js"></script>
   <script src="app.js"></script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://literary-map.vercel.app/#website",
+        "url": "https://literary-map.vercel.app/",
+        "name": "문학 지도",
+        "description": "한국 문학 작품의 배경이 된 장소를 지도에서 탐험하는 웹앱",
+        "inLanguage": "ko-KR"
+      },
+      {
+        "@type": "WebApplication",
+        "@id": "https://literary-map.vercel.app/#app",
+        "url": "https://literary-map.vercel.app/",
+        "name": "문학 지도 - 이야기가 머무는 곳",
+        "description": "150편 이상의 한국 문학 작품 배경 장소를 지도에서 탐험하고, 나만의 이야기를 남기는 문학 여행 안내 앱",
+        "applicationCategory": "EducationApplication",
+        "operatingSystem": "All",
+        "inLanguage": "ko-KR",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "KRW"
+        },
+        "author": {
+          "@type": "Person",
+          "name": "hanjaegyeong"
+        }
+      }
+    ]
+  }
+  </script>
 </body>
 </html>
