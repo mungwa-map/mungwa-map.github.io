@@ -314,6 +314,7 @@ const LITERARY_DATA = [
   // ── 서울 ──
   {
     id: 'lit-1',
+    slug: '윤동주-서시',
     region: 'seoul',
     title: '서시',
     author: '윤동주',
@@ -328,6 +329,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-2',
+    slug: '이상-날개',
     region: 'seoul',
     title: '날개',
     author: '이상',
@@ -342,6 +344,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-3',
+    slug: '김승옥-서울-1964년-겨울',
     region: 'seoul',
     title: '서울, 1964년 겨울',
     author: '김승옥',
@@ -356,6 +359,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-32',
+    slug: '염상섭-삼대',
     region: 'seoul',
     title: '삼대',
     author: '염상섭',
@@ -370,6 +374,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-33',
+    slug: '박태원-천변풍경',
     region: 'seoul',
     title: '천변풍경',
     author: '박태원',
@@ -384,6 +389,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-34',
+    slug: '박태원-소설가-구보씨의-일일',
     region: 'seoul',
     title: '소설가 구보씨의 일일',
     author: '박태원',
@@ -398,6 +404,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-35',
+    slug: '현진건-운수-좋은-날',
     region: 'seoul',
     title: '운수 좋은 날',
     author: '현진건',
@@ -412,6 +419,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-36',
+    slug: '이광수-무정',
     region: 'seoul',
     title: '무정',
     author: '이광수',
@@ -426,6 +434,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-37',
+    slug: '박완서-나목',
     region: 'seoul',
     title: '나목',
     author: '박완서',
@@ -440,6 +449,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-38',
+    slug: '이태준-달밤',
     region: 'seoul',
     title: '달밤',
     author: '이태준',
@@ -454,6 +464,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-39',
+    slug: '한용운-님의-침묵-seoul',
     region: 'seoul',
     title: '님의 침묵',
     author: '한용운',
@@ -468,6 +479,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-40',
+    slug: '김수영-풀',
     region: 'seoul',
     title: '풀',
     author: '김수영',
@@ -482,6 +494,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-41',
+    slug: '이상-오감도-시제1호',
     region: 'seoul',
     title: '오감도 시제1호',
     author: '이상',
@@ -498,6 +511,7 @@ const LITERARY_DATA = [
   // ── 경기 ──
   {
     id: 'lit-25',
+    slug: '황순원-소나기',
     region: 'yangpyeong',
     title: '소나기',
     author: '황순원',
@@ -512,6 +526,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-42',
+    slug: '김훈-남한산성',
     region: 'gyeonggi',
     title: '남한산성',
     author: '김훈',
@@ -526,6 +541,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-43',
+    slug: '박지원-허생전',
     region: 'gyeonggi',
     title: '허생전',
     author: '박지원',
@@ -540,6 +556,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-44',
+    slug: '조세희-난장이가-쏘아올린-작은-공',
     region: 'gyeonggi',
     title: '난장이가 쏘아올린 작은 공',
     author: '조세희',
@@ -554,6 +571,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-45',
+    slug: '정약용-보리타작',
     region: 'gyeonggi',
     title: '보리타작',
     author: '정약용',
@@ -568,6 +586,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-46',
+    slug: '나혜석-경희',
     region: 'gyeonggi',
     title: '경희',
     author: '나혜석',
@@ -584,6 +603,7 @@ const LITERARY_DATA = [
   // ── 인천 ──
   {
     id: 'lit-47',
+    slug: '오정희-중국인-거리',
     region: 'incheon',
     title: '중국인 거리',
     author: '오정희',
@@ -598,6 +618,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-48',
+    slug: '김중미-괭이부리말-아이들',
     region: 'incheon',
     title: '괭이부리말 아이들',
     author: '김중미',
@@ -612,6 +633,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-49',
+    slug: '함민복-모든-경계에는-꽃이-핀다',
     region: 'incheon',
     title: '모든 경계에는 꽃이 핀다',
     author: '함민복',
@@ -628,6 +650,7 @@ const LITERARY_DATA = [
   // ── 강원도 ──
   {
     id: 'lit-4',
+    slug: '이효석-메밀꽃-필-무렵',
     region: 'bongpyeong',
     title: '메밀꽃 필 무렵',
     author: '이효석',
@@ -642,6 +665,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-5',
+    slug: '김유정-동백꽃',
     region: 'chuncheon',
     title: '동백꽃',
     author: '김유정',
@@ -656,6 +680,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-52',
+    slug: '김유정-봄봄',
     region: 'chuncheon',
     title: '봄봄',
     author: '김유정',
@@ -670,6 +695,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-53',
+    slug: '이순원-은비령',
     region: 'sokcho',
     title: '은비령',
     author: '이순원',
@@ -684,6 +710,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-54',
+    slug: '허난설헌-곡자',
     region: 'gangneung',
     title: '곡자',
     author: '허난설헌',
@@ -698,6 +725,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-55',
+    slug: '박인환-목마와-숙녀',
     region: 'gangwon',
     title: '목마와 숙녀',
     author: '박인환',
@@ -712,6 +740,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-56',
+    slug: '신사임당-유대관령망친정',
     region: 'gangneung',
     title: '유대관령망친정',
     author: '신사임당',
@@ -726,6 +755,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-57',
+    slug: '작자-미상-헌화가',
     region: 'gangwon',
     title: '헌화가',
     author: '작자 미상',
@@ -740,6 +770,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-58',
+    slug: '이승휴-제왕운기',
     region: 'gangwon',
     title: '제왕운기',
     author: '이승휴',
@@ -754,6 +785,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-59',
+    slug: '전래-민요-정선아리랑',
     region: 'gangwon',
     title: '정선아리랑',
     author: '전래 민요',
@@ -768,6 +800,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-60',
+    slug: '박경리-토지-gangwon',
     region: 'gangwon',
     title: '토지',
     author: '박경리',
@@ -782,6 +815,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-61',
+    slug: '이외수-꿈꾸는-식물',
     region: 'gangwon',
     title: '꿈꾸는 식물',
     author: '이외수',
@@ -798,6 +832,7 @@ const LITERARY_DATA = [
   // ── 충청북도 ──
   {
     id: 'lit-6',
+    slug: '정지용-향수',
     region: 'okcheon',
     title: '향수',
     author: '정지용',
@@ -812,6 +847,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-7',
+    slug: '이문구-관촌수필',
     region: 'chungnam',
     title: '관촌수필',
     author: '이문구',
@@ -828,6 +864,7 @@ const LITERARY_DATA = [
   // ── 충청남도 ──
   {
     id: 'lit-8',
+    slug: '한용운-님의-침묵-chungnam',
     region: 'chungnam',
     title: '님의 침묵',
     author: '한용운',
@@ -842,6 +879,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-9',
+    slug: '심훈-상록수',
     region: 'chungnam',
     title: '상록수',
     author: '심훈',
@@ -856,6 +894,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-10',
+    slug: '신동엽-껍데기는-가라',
     region: 'buyeo',
     title: '껍데기는 가라',
     author: '신동엽',
@@ -872,6 +911,7 @@ const LITERARY_DATA = [
   // ── 경상북도 ──
   {
     id: 'lit-11',
+    slug: '김동리-무녀도',
     region: 'gyeongju',
     title: '무녀도',
     author: '김동리',
@@ -886,6 +926,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-12',
+    slug: '박목월-나그네-gyeongju-12',
     region: 'gyeongju',
     title: '나그네',
     author: '박목월',
@@ -900,6 +941,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-13',
+    slug: '조지훈-승무',
     region: 'gyeongbuk',
     title: '승무',
     author: '조지훈',
@@ -916,6 +958,7 @@ const LITERARY_DATA = [
   // ── 대구 ──
   {
     id: 'lit-26',
+    slug: '이상화-빼앗긴-들에도-봄은-오는가',
     region: 'daegu',
     title: '빼앗긴 들에도 봄은 오는가',
     author: '이상화',
@@ -932,6 +975,7 @@ const LITERARY_DATA = [
   // ── 전라북도 ──
   {
     id: 'lit-14',
+    slug: '채만식-탁류',
     region: 'gunsan',
     title: '탁류',
     author: '채만식',
@@ -946,6 +990,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-15',
+    slug: '최명희-혼불',
     region: 'namwon',
     title: '혼불',
     author: '최명희',
@@ -960,6 +1005,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-16',
+    slug: '서정주-국화-옆에서',
     region: 'gochang',
     title: '국화 옆에서',
     author: '서정주',
@@ -976,6 +1022,7 @@ const LITERARY_DATA = [
   // ── 광주 ──
   {
     id: 'lit-19',
+    slug: '한강-소년이-온다',
     region: 'gwangju',
     title: '소년이 온다',
     author: '한강',
@@ -992,6 +1039,7 @@ const LITERARY_DATA = [
   // ── 전라남도 ──
   {
     id: 'lit-17',
+    slug: '조정래-태백산맥',
     region: 'beolgyo',
     title: '태백산맥',
     author: '조정래',
@@ -1006,6 +1054,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-18',
+    slug: '김승옥-무진기행',
     region: 'beolgyo',
     title: '무진기행',
     author: '김승옥',
@@ -1022,6 +1071,7 @@ const LITERARY_DATA = [
   // ── 울산 ──
   {
     id: 'lit-28',
+    slug: '작자-미상-처용가',
     region: 'ulsan',
     title: '처용가',
     author: '작자 미상',
@@ -1038,6 +1088,7 @@ const LITERARY_DATA = [
   // ── 경상남도 ──
   {
     id: 'lit-20',
+    slug: '박경리-토지-hadong',
     region: 'hadong',
     title: '토지',
     author: '박경리',
@@ -1052,6 +1103,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-21',
+    slug: '유치환-깃발',
     region: 'tongyeong',
     title: '깃발',
     author: '유치환',
@@ -1066,6 +1118,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-22',
+    slug: '김원일-마당-깊은-집-gyeongnam',
     region: 'gyeongnam',
     title: '마당 깊은 집',
     author: '김원일',
@@ -1082,6 +1135,7 @@ const LITERARY_DATA = [
   // ── 부산 ──
   {
     id: 'lit-27',
+    slug: '최인훈-광장',
     region: 'busan',
     title: '광장',
     author: '최인훈',
@@ -1098,6 +1152,7 @@ const LITERARY_DATA = [
   // ── 제주도 ──
   {
     id: 'lit-23',
+    slug: '현기영-순이-삼촌',
     region: 'jeju',
     title: '순이 삼촌',
     author: '현기영',
@@ -1112,6 +1167,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-24',
+    slug: '이청준-이어도',
     region: 'jeju',
     title: '이어도',
     author: '이청준',
@@ -1128,6 +1184,7 @@ const LITERARY_DATA = [
   // ── 강릉 ──
   {
     id: 'lit-29',
+    slug: '정철-관동별곡',
     region: 'gangneung',
     title: '관동별곡',
     author: '정철',
@@ -1144,6 +1201,7 @@ const LITERARY_DATA = [
   // ── 안동 ──
   {
     id: 'lit-30',
+    slug: '이육사-광야',
     region: 'andong',
     title: '광야',
     author: '이육사',
@@ -1160,6 +1218,7 @@ const LITERARY_DATA = [
   // ── 목포 ──
   {
     id: 'lit-31',
+    slug: '박화성-추석전야',
     region: 'mokpo',
     title: '추석전야',
     author: '박화성',
@@ -1176,6 +1235,7 @@ const LITERARY_DATA = [
   // ═══ 충청북도 추가 ═══
   {
     id: 'lit-62',
+    slug: '정지용-유리창',
     region: 'okcheon',
     title: '유리창',
     author: '정지용',
@@ -1190,6 +1250,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-63',
+    slug: '정지용-호수',
     region: 'okcheon',
     title: '호수',
     author: '정지용',
@@ -1204,6 +1265,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-64',
+    slug: '신경림-농무',
     region: 'chungbuk',
     title: '농무',
     author: '신경림',
@@ -1220,6 +1282,7 @@ const LITERARY_DATA = [
   // ═══ 충청남도 추가 ═══
   {
     id: 'lit-65',
+    slug: '심훈-그날이-오면',
     region: 'chungnam',
     title: '그날이 오면',
     author: '심훈',
@@ -1234,6 +1297,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-66',
+    slug: '성삼문-절명시',
     region: 'chungnam',
     title: '절명시',
     author: '성삼문',
@@ -1248,6 +1312,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-67',
+    slug: '한용운-나룻배와-행인',
     region: 'chungnam',
     title: '나룻배와 행인',
     author: '한용운',
@@ -1262,6 +1327,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-68',
+    slug: '나태주-풀꽃',
     region: 'chungnam',
     title: '풀꽃',
     author: '나태주',
@@ -1278,6 +1344,7 @@ const LITERARY_DATA = [
   // ═══ 경상북도·대구 추가 ═══
   {
     id: 'lit-69',
+    slug: '이육사-청포도',
     region: 'andong',
     title: '청포도',
     author: '이육사',
@@ -1292,6 +1359,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-70',
+    slug: '이육사-절정',
     region: 'andong',
     title: '절정',
     author: '이육사',
@@ -1306,6 +1374,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-71',
+    slug: '이황-도산십이곡',
     region: 'andong',
     title: '도산십이곡',
     author: '이황',
@@ -1320,6 +1389,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-72',
+    slug: '월명사-제망매가',
     region: 'gyeongju',
     title: '제망매가',
     author: '월명사',
@@ -1334,6 +1404,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-73',
+    slug: '박목월-나그네-gyeongju-73',
     region: 'gyeongju',
     title: '나그네',
     author: '박목월',
@@ -1348,6 +1419,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-74',
+    slug: '최치원-추야우중',
     region: 'gyeongju',
     title: '추야우중',
     author: '최치원',
@@ -1362,6 +1434,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-75',
+    slug: '이상화-나의-침실로',
     region: 'daegu',
     title: '나의 침실로',
     author: '이상화',
@@ -1376,6 +1449,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-76',
+    slug: '이장희-봄은-고양이로다',
     region: 'daegu',
     title: '봄은 고양이로다',
     author: '이장희',
@@ -1390,6 +1464,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-77',
+    slug: '이문열-젊은-날의-초상',
     region: 'yeongyang',
     title: '젊은 날의 초상',
     author: '이문열',
@@ -1406,6 +1481,7 @@ const LITERARY_DATA = [
   // ═══ 전라북도 추가 ═══
   {
     id: 'lit-78',
+    slug: '작자-미상-정읍사',
     region: 'jeonbuk',
     title: '정읍사',
     author: '작자 미상',
@@ -1420,6 +1496,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-79',
+    slug: '판소리-춘향가',
     region: 'namwon',
     title: '춘향가',
     author: '판소리',
@@ -1434,6 +1511,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-80',
+    slug: '서정주-자화상',
     region: 'gochang',
     title: '자화상',
     author: '서정주',
@@ -1448,6 +1526,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-81',
+    slug: '채만식-태평천하',
     region: 'gunsan',
     title: '태평천하',
     author: '채만식',
@@ -1462,6 +1541,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-82',
+    slug: '이병기-난초',
     region: 'jeonju',
     title: '난초',
     author: '이병기',
@@ -1476,6 +1556,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-83',
+    slug: '신석정-꽃덤불',
     region: 'jeonbuk',
     title: '꽃덤불',
     author: '신석정',
@@ -1492,6 +1573,7 @@ const LITERARY_DATA = [
   // ═══ 광주·전라남도 추가 ═══
   {
     id: 'lit-84',
+    slug: '임철우-봄날',
     region: 'gwangju',
     title: '봄날',
     author: '임철우',
@@ -1506,6 +1588,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-85',
+    slug: '김영랑-모란이-피기까지는',
     region: 'jeonnam',
     title: '모란이 피기까지는',
     author: '김영랑',
@@ -1520,6 +1603,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-86',
+    slug: '윤선도-어부사시사',
     region: 'haenam',
     title: '어부사시사',
     author: '윤선도',
@@ -1534,6 +1618,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-87',
+    slug: '곽재구-사평역에서',
     region: 'beolgyo',
     title: '사평역에서',
     author: '곽재구',
@@ -1548,6 +1633,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-88',
+    slug: '정철-성산별곡',
     region: 'jeonnam',
     title: '성산별곡',
     author: '정철',
@@ -1562,6 +1648,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-89',
+    slug: '이청준-서편제',
     region: 'jeonnam',
     title: '서편제',
     author: '이청준',
@@ -1576,6 +1663,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-90',
+    slug: '박용철-떠나가는-배',
     region: 'jeonnam',
     title: '떠나가는 배',
     author: '박용철',
@@ -1590,6 +1678,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-91',
+    slug: '정철-사미인곡',
     region: 'jeonnam',
     title: '사미인곡',
     author: '정철',
@@ -1604,6 +1693,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-92',
+    slug: '이청준-당신들의-천국',
     region: 'jeonnam',
     title: '당신들의 천국',
     author: '이청준',
@@ -1620,6 +1710,7 @@ const LITERARY_DATA = [
   // ═══ 경상남도·울산 추가 ═══
   {
     id: 'lit-93',
+    slug: '김춘수-꽃',
     region: 'tongyeong',
     title: '꽃',
     author: '김춘수',
@@ -1634,6 +1725,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-94',
+    slug: '김만중-구운몽',
     region: 'namhae',
     title: '구운몽',
     author: '김만중',
@@ -1648,6 +1740,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-95',
+    slug: '천상병-귀천',
     region: 'gyeongnam',
     title: '귀천',
     author: '천상병',
@@ -1662,6 +1755,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-96',
+    slug: '박경리-김약국의-딸들',
     region: 'tongyeong',
     title: '김약국의 딸들',
     author: '박경리',
@@ -1676,6 +1770,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-97',
+    slug: '이은상-가고파',
     region: 'gyeongnam',
     title: '가고파',
     author: '이은상',
@@ -1690,6 +1785,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-98',
+    slug: '변영로-논개',
     region: 'gyeongnam',
     title: '논개',
     author: '변영로',
@@ -1704,6 +1800,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-99',
+    slug: '김정한-모래톱-이야기',
     region: 'gyeongnam',
     title: '모래톱 이야기',
     author: '김정한',
@@ -1720,6 +1817,7 @@ const LITERARY_DATA = [
   // ═══ 부산 추가 ═══
   {
     id: 'lit-100',
+    slug: '김정한-사하촌',
     region: 'busan',
     title: '사하촌',
     author: '김정한',
@@ -1736,6 +1834,7 @@ const LITERARY_DATA = [
   // ═══ 제주 추가 ═══
   {
     id: 'lit-101',
+    slug: '현기영-바람-타는-섬',
     region: 'jeju',
     title: '바람 타는 섬',
     author: '현기영',
@@ -1752,6 +1851,7 @@ const LITERARY_DATA = [
   // ═══ 서울 추가 ═══
   {
     id: 'lit-102',
+    slug: '김광섭-성북동-비둘기',
     region: 'seoul',
     title: '성북동 비둘기',
     author: '김광섭',
@@ -1766,6 +1866,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-103',
+    slug: '염상섭-만세전',
     region: 'seoul',
     title: '만세전',
     author: '염상섭',
@@ -1780,6 +1881,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-104',
+    slug: '현진건-빈처',
     region: 'seoul',
     title: '빈처',
     author: '현진건',
@@ -1794,6 +1896,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-105',
+    slug: '이상-봉별기',
     region: 'seoul',
     title: '봉별기',
     author: '이상',
@@ -1810,6 +1913,7 @@ const LITERARY_DATA = [
   // ═══ 강원 추가 ═══
   {
     id: 'lit-106',
+    slug: '김유정-금-따는-콩밭',
     region: 'chuncheon',
     title: '금 따는 콩밭',
     author: '김유정',
@@ -1824,6 +1928,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-107',
+    slug: '허균-홍길동전',
     region: 'gangneung',
     title: '홍길동전',
     author: '허균',
@@ -1841,6 +1946,7 @@ const LITERARY_DATA = [
   // ═══ 보충 작품 ═══
   {
     id: 'lit-108',
+    slug: '김동리-역마',
     region: 'gyeongju',
     title: '역마',
     author: '김동리',
@@ -1855,6 +1961,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-109',
+    slug: '신동엽-금강',
     region: 'buyeo',
     title: '금강',
     author: '신동엽',
@@ -1869,6 +1976,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-110',
+    slug: '판소리-흥보가',
     region: 'namwon',
     title: '흥보가',
     author: '판소리',
@@ -1883,6 +1991,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-111',
+    slug: '오영수-갯마을',
     region: 'busan',
     title: '갯마을',
     author: '오영수',
@@ -1897,6 +2006,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-112',
+    slug: '이병주-지리산',
     region: 'hadong',
     title: '지리산',
     author: '이병주',
@@ -1911,6 +2021,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-113',
+    slug: '손창섭-비-오는-날',
     region: 'seoul',
     title: '비 오는 날',
     author: '손창섭',
@@ -1925,6 +2036,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-114',
+    slug: '혜경궁-홍씨-한중록',
     region: 'seoul',
     title: '한중록',
     author: '혜경궁 홍씨',
@@ -1939,6 +2051,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-115',
+    slug: '신경숙-엄마를-부탁해',
     region: 'seoul',
     title: '엄마를 부탁해',
     author: '신경숙',
@@ -1953,6 +2066,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-116',
+    slug: '판소리-심청전',
     region: 'jeonnam',
     title: '심청전',
     author: '판소리',
@@ -1967,6 +2081,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-117',
+    slug: '고정희-상한-영혼을-위하여',
     region: 'gwangju',
     title: '상한 영혼을 위하여',
     author: '고정희',
@@ -1981,6 +2096,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-118',
+    slug: '김훈-칼의-노래',
     region: 'tongyeong',
     title: '칼의 노래',
     author: '김훈',
@@ -1995,6 +2111,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-119',
+    slug: '황석영-삼포-가는-길',
     region: 'gangwon',
     title: '삼포 가는 길',
     author: '황석영',
@@ -2009,6 +2126,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-120',
+    slug: '윤흥길-장마',
     region: 'jeonbuk',
     title: '장마',
     author: '윤흥길',
@@ -2023,6 +2141,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-121',
+    slug: '김동리-등신불',
     region: 'gyeongbuk',
     title: '등신불',
     author: '김동리',
@@ -2037,6 +2156,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-122',
+    slug: '이기영-고향',
     region: 'chungnam',
     title: '고향',
     author: '이기영',
@@ -2051,6 +2171,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-123',
+    slug: '조정래-아리랑',
     region: 'jeonbuk',
     title: '아리랑',
     author: '조정래',
@@ -2065,6 +2186,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-124',
+    slug: '정약전-자산어보',
     region: 'jeonnam',
     title: '자산어보',
     author: '정약전',
@@ -2079,6 +2201,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-125',
+    slug: '김광균-와사등',
     region: 'seoul',
     title: '와사등',
     author: '김광균',
@@ -2093,6 +2216,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-126',
+    slug: '선우휘-불꽃',
     region: 'seoul',
     title: '불꽃',
     author: '선우휘',
@@ -2107,6 +2231,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-127',
+    slug: '주요섭-사랑손님과-어머니',
     region: 'mokpo',
     title: '사랑손님과 어머니',
     author: '주요섭',
@@ -2121,6 +2246,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-128',
+    slug: '서덕출-해',
     region: 'ulsan',
     title: '해',
     author: '서덕출',
@@ -2135,6 +2261,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-129',
+    slug: '황순원-별',
     region: 'gyeongnam',
     title: '별',
     author: '황순원',
@@ -2149,6 +2276,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-130',
+    slug: '김원일-마당-깊은-집-daegu',
     region: 'daegu',
     title: '마당 깊은 집',
     author: '김원일',
@@ -2163,6 +2291,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-131',
+    slug: '현길언-지상에-숟가락-하나',
     region: 'jeju',
     title: '지상에 숟가락 하나',
     author: '현길언',
@@ -2179,6 +2308,7 @@ const LITERARY_DATA = [
 ,
   {
     id: 'lit-132',
+    slug: '박완서-그-여자네-집',
     region: 'sokcho',
     title: '그 여자네 집',
     author: '박완서',
@@ -2197,6 +2327,7 @@ const LITERARY_DATA = [
   // 경주
   {
     id: 'lit-133',
+    slug: '박목월-윤사월',
     region: 'gyeongju',
     title: '윤사월',
     author: '박목월',
@@ -2213,6 +2344,7 @@ const LITERARY_DATA = [
   // 안동
   {
     id: 'lit-134',
+    slug: '권정생-강아지똥',
     region: 'andong',
     title: '강아지똥',
     author: '권정생',
@@ -2229,6 +2361,7 @@ const LITERARY_DATA = [
   // 영양
   {
     id: 'lit-135',
+    slug: '조지훈-낙화',
     region: 'yeongyang',
     title: '낙화',
     author: '조지훈',
@@ -2245,6 +2378,7 @@ const LITERARY_DATA = [
   // 담양
   {
     id: 'lit-136',
+    slug: '송순-면앙정가',
     region: 'damyang',
     title: '면앙정가',
     author: '송순',
@@ -2261,6 +2395,7 @@ const LITERARY_DATA = [
   // 목포
   {
     id: 'lit-137',
+    slug: '김우진-이영녀',
     region: 'mokpo',
     title: '이영녀',
     author: '김우진',
@@ -2277,6 +2412,7 @@ const LITERARY_DATA = [
   // 전남 (장흥)
   {
     id: 'lit-138',
+    slug: '한승원-목선',
     region: 'jeonnam',
     title: '목선',
     author: '한승원',
@@ -2293,6 +2429,7 @@ const LITERARY_DATA = [
   // 강진
   {
     id: 'lit-139',
+    slug: '김영랑-끝없는-강물이-흐르네',
     region: 'gangjin',
     title: '끝없는 강물이 흐르네',
     author: '김영랑',
@@ -2309,6 +2446,7 @@ const LITERARY_DATA = [
   // 광주
   {
     id: 'lit-140',
+    slug: '김준태-아아-광주여-우리나라의-십자가여',
     region: 'gwangju',
     title: '아아 광주여 우리나라의 십자가여',
     author: '김준태',
@@ -2325,6 +2463,7 @@ const LITERARY_DATA = [
   // 남해
   {
     id: 'lit-141',
+    slug: '김만중-사씨남정기',
     region: 'namhae',
     title: '사씨남정기',
     author: '김만중',
@@ -2341,6 +2480,7 @@ const LITERARY_DATA = [
   // 울산
   {
     id: 'lit-142',
+    slug: '서덕출-봄편지',
     region: 'ulsan',
     title: '봄편지',
     author: '서덕출',
@@ -2357,6 +2497,7 @@ const LITERARY_DATA = [
   // 통영
   {
     id: 'lit-143',
+    slug: '유치환-행복',
     region: 'tongyeong',
     title: '행복',
     author: '유치환',
@@ -2373,6 +2514,7 @@ const LITERARY_DATA = [
   // 부산
   {
     id: 'lit-144',
+    slug: '김동리-밀다원-시대',
     region: 'busan',
     title: '밀다원 시대',
     author: '김동리',
@@ -2387,6 +2529,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-145',
+    slug: '이호철-탈향',
     region: 'busan',
     title: '탈향',
     author: '이호철',
@@ -2403,6 +2546,7 @@ const LITERARY_DATA = [
   // 제주
   {
     id: 'lit-146',
+    slug: '한강-작별하지-않는다',
     region: 'jeju',
     title: '작별하지 않는다',
     author: '한강',
@@ -2417,6 +2561,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-147',
+    slug: '이산하-한라산',
     region: 'jeju',
     title: '한라산',
     author: '이산하',
@@ -2431,6 +2576,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-148',
+    slug: '이생진-그리운-바다-성산포',
     region: 'jeju',
     title: '그리운 바다 성산포',
     author: '이생진',
@@ -2445,6 +2591,7 @@ const LITERARY_DATA = [
   },
   {
     id: 'lit-149',
+    slug: '김석범-까마귀의-죽음',
     region: 'jeju',
     title: '까마귀의 죽음',
     author: '김석범',
