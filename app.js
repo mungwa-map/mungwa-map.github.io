@@ -282,14 +282,14 @@
     if (!region) return;
     var allIds = getRegionAndChildIds(regionId);
     var count = LITERARY_DATA.filter(function(w) { return allIds.indexOf(w.region) !== -1; }).length;
-    var title = region.name + ' — 문학 지도';
+    var title = region.name + ' — 문과 지도';
     var desc = region.description + ' 문학작품 ' + count + '편의 배경 장소를 탐험하세요.';
     setMeta(title, desc);
   }
 
   function setMetaForWork(work) {
     var regionName = REGIONS[work.region] ? REGIONS[work.region].shortName : '';
-    var title = '『' + work.title + '』 ' + work.author + ' — 문학 지도';
+    var title = '『' + work.title + '』 ' + work.author + ' — 문과 지도';
     var desc = work.description.slice(0, 120) + (work.description.length > 120 ? '…' : '');
     setMeta(title, desc);
   }
