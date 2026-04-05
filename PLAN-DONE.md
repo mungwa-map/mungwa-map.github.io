@@ -2,6 +2,28 @@
 
 ---
 
+## SEO 최적화 + URL 라우팅 (2026-04-05 완료)
+
+- [x] `index.html` — `<title>`, `<meta description>`, `<meta keywords>` 정비
+- [x] Open Graph 태그 추가 (`og:title`, `og:description`, `og:image`, `og:url`, `og:type`)
+- [x] Twitter Card 태그 추가
+- [x] `<html lang="ko">` 확인 및 `<meta charset>`, viewport 정비
+- [x] Canonical URL `<link rel="canonical">` 추가
+- [x] `robots.txt` 생성
+- [x] `sitemap.xml` 생성
+- [x] JSON-LD 구조화 데이터 추가 (`WebSite` + `WebApplication` 스키마)
+- [ ] OG 이미지 생성 (`og-image.png`, 1200×630px) — 수동 작업 필요
+- [x] `manifest.json` name/description/lang 값 SEO와 통일
+- [x] URL 라우팅 설계 — History API 기반 (`/region/:id`, `/work/:id`)
+- [x] `vercel.json` SPA fallback 설정
+- [x] `app.js` — 라우터 모듈 (pushState, popstate, 초기 URL 복원)
+- [x] 지역 선택 시 `<title>` + `og:title` + `og:description` 동적 업데이트
+- [x] 작품 상세 열릴 때 `<title>` + `og:title` + `og:description` 동적 업데이트
+- [x] 홈으로 복귀 시 원래 title/meta 복원
+- [x] 150개 작품 전체 slug 필드 추가 (`data.js`) — 한국어 의미있는 URL
+
+---
+
 ## 초기 구축 (2026-04-01 완료)
 
 - [x] SVG 기반 한국 지도 (17개 시·도)
